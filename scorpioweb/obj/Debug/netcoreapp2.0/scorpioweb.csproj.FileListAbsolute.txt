@@ -10,3 +10,8 @@ C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\sco
 C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.pdb
 C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.csprojAssemblyReference.cache
 C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\appsettings.Development.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\bower.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\bundleconfig.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\Properties\launchSettings.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\appsettings.json

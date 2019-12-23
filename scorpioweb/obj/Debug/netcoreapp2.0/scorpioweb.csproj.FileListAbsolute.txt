@@ -1,0 +1,12 @@
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\scorpioweb.deps.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\scorpioweb.runtimeconfig.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\scorpioweb.runtimeconfig.dev.json
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\scorpioweb.dll
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.csproj.CoreCompileInputs.cache
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.AssemblyInfoInputs.cache
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.AssemblyInfo.cs
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\bin\Debug\netcoreapp2.0\scorpioweb.pdb
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.dll
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.pdb
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\scorpioweb.csprojAssemblyReference.cache
+C:\Users\Sistemas\source\repos\scorpioweb\scorpioweb\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs

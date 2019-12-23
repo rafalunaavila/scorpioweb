@@ -1,0 +1,22 @@
+﻿#titulo, footer, #impresion, #header {
+    display: none !important;
+}
+
+.contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position:relative
+}
+
+#impresionLogo {
+    display: inline;
+    width:10%;
+    height:10%;
+}
+
+#imprimirQR {
+    width: 30%;
+    height: 30%;
+}

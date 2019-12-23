@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "QR";
+}
+
+<h2 id="titulo">@ViewData["Title"]</h2>
+
+<form method="post" asp-controller="home" asp-action="generate" id="impresion">
+    <div class="form-group">
+        <label for="paterno" name="paterno">Paterno</label>
+        <input type="text" class="form-control" placeholder="Apellido Paterno" name="paterno" value="@ViewBag.paterno" aria-describedby="paternoHelp">
+    </div>
+    <div class="form-group">
+        <label for="materno" name="materno">Materno</label>
+        <input type="text" class="form-control" placeholder="Apellido Materno" name="materno" value="@ViewBag.materno" aria-describedby="paternoHelp">
+    </div>
+    <div class="form-group">
+        <label for="nombre" name="nombre">Nombre (s)</label>
+        <input type="text" class="form-control" placeholder="Nombre (s)" name="nombre" value="@ViewBag.nombre" aria-describedby="paternoHelp">
+    </div>
+    <input class="btn btn-primary" type="submit" value="Generar" />
+</form>
+
+@*<qrcode content="@ViewBag.paterno+@ViewBag.materno+@ViewBag.nombre" width="200" height="200" />*@
+
+
+<div class="contenedor">
+    <div id="imprimirQR">
+        @if (@ViewBag.paterno != null)
+        {
+            <qrcode content="@ViewBag.paterno @ViewBag.materno @ViewBag.nombre" width="200" height="200" id="qr" />
+        }
+        <h2>E1-12-13-231</h2>
+        <div id="impresionLogo">
+            <img src="~/images/logo.png" />
+        </div>
+    </div>
+    
+</div>
+
+

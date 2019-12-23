@@ -13,6 +13,11 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+
+#Ignorar
+appsettings.json
+penas2Context.cs
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -55,9 +60,6 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-
-#Ignorar
-appsettings.json
 
 # StyleCop
 StyleCopReport.xml

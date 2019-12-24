@@ -1,0 +1,43 @@
+﻿@model scorpioweb.Models.Firmas
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Firmas</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Libro)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Libro)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Foja)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Foja)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Idfirmas">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

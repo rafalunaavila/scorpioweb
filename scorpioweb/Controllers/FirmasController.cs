@@ -57,11 +57,22 @@ namespace scorpioweb.Controllers
         {
             if (ModelState.IsValid)
             {
+                firmas.Fecha = DateTime.Now;
                 _context.Add(firmas);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Create));
             }
             return View(firmas);
+        }
+
+        public IActionResult GeneraQR(string id, string nombre, string fecha, string libro, string foja)
+        {
+            ViewBag.id = id;
+            ViewBag.nombre = nombre;
+            ViewBag.fecha = fecha;
+            ViewBag.libro = libro;
+            ViewBag.foja = foja;
+            return View("Create");
         }
 
         // GET: Firmas/Edit/5

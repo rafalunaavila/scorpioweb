@@ -9,38 +9,29 @@
     <script src="@Url.Content("~/js/scripts.js")"></script>
 }
 
-<h2 id="titulo">Firmas</h2>
+<h2 id="titulo">Control de Firmas</h2>
 
 <hr />
 <div class="row" id="QRForm">
     <div class="col-md-4">
         <form method="post" name="QRForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-                    <label asp-for="Idfirmas" class="control-label"></label>
-                    <input asp-for="Idfirmas" class="form-control" value="@ViewBag.id" />
-                    <span asp-validation-for="Idfirmas" class="text-danger"></span>
-                </div>*@
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" value="@ViewBag.nombre" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" value="@ViewBag.fecha" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="Libro" class="control-label"></label>
-                <input asp-for="Libro" class="form-control" value="@ViewBag.libro" />
-                <span asp-validation-for="Libro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Foja" class="control-label"></label>
-                <input asp-for="Foja" class="form-control" value="@ViewBag.foja" />
-                <span asp-validation-for="Foja" class="text-danger"></span>
-            </div>
+        <div class="form-group">
+            <label asp-for="Sexo" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Sexo, (SelectList)ViewBag.genero, new { @class = "form-control"})
+            <span asp-validation-for="Sexo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Libro" class="control-label"></label>
+            @Html.DropDownListFor(m => m.Libro, (SelectList)ViewBag.libros, new { @class = "form-control" })
+            <span asp-validation-for="Libro" class="text-danger"></span>
+        </div>
+
             <div class="form-group">
                 @if (@ViewBag.nombre == null)
                 {
@@ -60,8 +51,9 @@
         @if (@ViewBag.nombre != null)
         {
             <qrcode content="@ViewBag.nombre" width="200" height="200" id="qr" />
+            <h2 value="@ViewBag.code">@ViewBag.code</h2>
         }
-        @*<h2>E1-12-13-segundo</h2>*@
+
         <div id="impresionLogo">
             <img src="~/images/logo.png" />
         </div>

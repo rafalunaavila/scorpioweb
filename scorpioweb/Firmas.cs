@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace scorpioweb.Models
+namespace scorpioweb
 {
     public partial class Firmas
     {

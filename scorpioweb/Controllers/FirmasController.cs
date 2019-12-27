@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scorpioweb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace scorpioweb.Controllers
 {
@@ -18,6 +19,22 @@ namespace scorpioweb.Controllers
             _context = context;
         }
 
+        SelectList listaGenero = new SelectList(
+                                    new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "HOMBRE", Value = "H" },
+                                        new SelectListItem { Text = "MUJER", Value = "M"},
+                                    }, "Value", "Text");
+        SelectList listaLibro = new SelectList(
+                                    new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "Suspensión Condicional del Proceso", Value = "SCP" },
+                                        new SelectListItem { Text = "Medida Cautelar", Value = "MC"},
+                                        new SelectListItem { Text = "Condición en Libertad", Value = "CL"},
+                                        new SelectListItem { Text = "Juzgado 1", Value = "J1"},
+                                        new SelectListItem { Text = "Juzgado 2", Value = "J2"},
+                                        new SelectListItem { Text = "Juzgado 3", Value = "J3"},
+                                    }, "Value", "Text");
         // GET: Firmas
         public async Task<IActionResult> Index()
         {
@@ -43,8 +60,11 @@ namespace scorpioweb.Controllers
         }
 
         // GET: Firmas/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
+            ViewBag.genero = listaGenero;
+            ViewBag.libros = listaLibro;
             return View();
         }
 
@@ -53,11 +73,12 @@ namespace scorpioweb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Idfirmas,Nombre,Fecha,Libro,Foja")] Firmas firmas)
+        public async Task<IActionResult> Create([Bind("Idfirmas,Nombre,Fecha,Sexo,Libro")] Firmas firmas)
         {
             if (ModelState.IsValid)
             {
                 firmas.Fecha = DateTime.Now;
+                firmas.Nombre = (firmas.Nombre).ToUpper();
                 _context.Add(firmas);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Create));
@@ -65,13 +86,33 @@ namespace scorpioweb.Controllers
             return View(firmas);
         }
 
-        public IActionResult GeneraQR(string id, string nombre, string fecha, string libro, string foja)
+        public IActionResult GeneraQR(string nombre, string sexo, string libro)
         {
-            ViewBag.id = id;
             ViewBag.nombre = nombre;
-            ViewBag.fecha = fecha;
-            ViewBag.libro = libro;
-            ViewBag.foja = foja;
+            
+            foreach(SelectListItem item in listaGenero.Items)
+            {
+                if (item.Value == sexo)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+            ViewBag.genero = listaGenero;
+
+            foreach (SelectListItem item in listaLibro.Items)
+            {
+                if (item.Value == libro)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+            ViewBag.libros = listaLibro;
+
+            String codigo = DateTime.Now.ToString("MM-dd-yyyy");
+            ViewBag.code = codigo;
+
             return View("Create");
         }
 
@@ -96,7 +137,7 @@ namespace scorpioweb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Idfirmas,Nombre,Fecha,Libro,Foja")] Firmas firmas)
+        public async Task<IActionResult> Edit(int id, [Bind("Idfirmas,Nombre,Fecha,Sexo,Libro")] Firmas firmas)
         {
             if (id != firmas.Idfirmas)
             {

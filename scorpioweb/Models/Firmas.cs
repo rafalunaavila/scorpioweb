@@ -10,5 +10,6 @@ namespace scorpioweb.Models
         public DateTime? Fecha { get; set; }
         public string Sexo { get; set; }
         public string Libro { get; set; }
+        public string Codigo { get; set; }
     }
 }

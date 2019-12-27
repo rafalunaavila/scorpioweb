@@ -73,7 +73,7 @@ namespace scorpioweb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Idfirmas,Nombre,Fecha,Sexo,Libro")] Firmas firmas)
+        public async Task<IActionResult> Create([Bind("Idfirmas,Nombre,Fecha,Sexo,Libro, Codigo")] Firmas firmas)
         {
             if (ModelState.IsValid)
             {
@@ -88,29 +88,36 @@ namespace scorpioweb.Controllers
 
         public IActionResult GeneraQR(string nombre, string sexo, string libro)
         {
-            ViewBag.nombre = nombre;
+            ViewBag.nombre = nombre.ToUpper();
             
             foreach(SelectListItem item in listaGenero.Items)
             {
                 if (item.Value == sexo)
                 {
+                    
                     item.Selected = true;
                     break;
                 }
             }
             ViewBag.genero = listaGenero;
 
+            string lib = "";
             foreach (SelectListItem item in listaLibro.Items)
             {
                 if (item.Value == libro)
                 {
+                    lib = (item.Value).ToString();
                     item.Selected = true;
                     break;
                 }
             }
             ViewBag.libros = listaLibro;
 
-            String codigo = DateTime.Now.ToString("MM-dd-yyyy");
+            var count = (from table in _context.Firmas                         
+                         select table).Count();
+
+            char[] nom = (nombre.ToUpper()).ToCharArray();
+            String codigo = lib +""+ nom[0] +""+ (count + 1) + "-" + Convert.ToInt32(DateTime.Now.ToString("ddMM"));
             ViewBag.code = codigo;
 
             return View("Create");

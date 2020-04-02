@@ -1,0 +1,82 @@
+﻿@model scorpioweb.Models.Proceso
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Proceso</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CausaPenal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CausaPenal)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Coimputados)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Coimputados)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CoimputadosSupervision)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CoimputadosSupervision)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NoCoimputadosSupervision)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NoCoimputadosSupervision)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RelacionSupervisado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RelacionSupervisado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RelacionLugar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RelacionLugar)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EspecificaRelacion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EspecificaRelacion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Funcionario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Funcionario)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EspecificaFuncionario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EspecificaFuncionario)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observaciones)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observaciones)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdProceso" />
+        <input type="hidden" asp-for="PersonaIdPersona" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

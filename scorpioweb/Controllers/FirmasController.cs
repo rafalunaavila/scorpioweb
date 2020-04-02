@@ -60,7 +60,7 @@ namespace scorpioweb.Controllers
         }
 
         // GET: Firmas/Create
-        [Authorize(Roles = "Administrador")]
+        //[Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             ViewBag.genero = listaGenero;

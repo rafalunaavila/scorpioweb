@@ -1,0 +1,89 @@
+﻿@model IEnumerable<scorpioweb.Models.Proceso>
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CausaPenal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Coimputados)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CoimputadosSupervision)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NoCoimputadosSupervision)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RelacionSupervisado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RelacionLugar)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EspecificaRelacion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Funcionario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EspecificaFuncionario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Observaciones)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CausaPenal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Coimputados)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoimputadosSupervision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoCoimputadosSupervision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelacionSupervisado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelacionLugar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EspecificaRelacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcionario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EspecificaFuncionario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observaciones)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdProceso">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdProceso">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdProceso">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,208 @@
+﻿
+
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Crear nuevo registro</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="container">
+                <div class="panel-group">
+                    <div id="datosGenerales" class="panel panel-primary">
+                        <div class="panel-heading" style="color:#fff; background-color:#0078A7; border-color:#0078A7;">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse1" onclick="mostrar">Datos Generales</a>
+                            </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Nombre (s)</label>
+                                <input required name="nombre" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Apellido paterno</label>
+                                <input required name="paterno" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Apellido materno</label>
+                                <input name="materno" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Alias</label>
+                                <input name="alias" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Genero</label>
+                                <select class="form-control" name="sexo">
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="N">Prefiero no decirlo</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Edad</label>
+                                <input required name="edad" type="number" value="0" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Fecha de nacimiento</label>
+                                <input required name="fNacimiento" type="date" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">País</label>
+                                <select class="form-control" name="lnPais">
+                                    <option value="MEXICO">México</option>
+                                    <option value="ESTADOS UNIDOS">Estados Unidos</option>
+                                    <option value="CANADA">Canada</option>
+                                    <option value="COLOMBIA">Colombia</option>
+                                    <option value="EL SALVADOR">El Salvador</option>
+                                    <option value="GUATEMALA">Guatemala</option>
+                                    <option value="CHILE">Chile</option>
+                                    <option value="OTRO">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Estado</label>
+                                <select class="form-control" name="lnEstado"
+                                        asp-items="@(new SelectList(ViewBag.ListadoEstados, "Id","Estado"))">                                    
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Municipio</label>
+                                <select class="form-control" name="lnMunicipio" id="lnMunicipio"
+                                        asp-items="@(new SelectList(string.Empty,"Id","Municipio"))">                                    
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Localidad</label>
+                                <select class="form-control" name="lnLocalidad">
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="N">Prefiero no decirlo</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Estado Civil</label>
+                                <select class="form-control" name="estadoCivil">
+                                    <option value="Soltero (a)">Soltero (a)</option>
+                                    <option value="Casado (a)">Casado (a)</option>
+                                    <option value="Union libre">Unión libre</option>
+                                    <option value="Viudo (a)">Viudo (a)</option>
+                                    <option value="Divorciado (a)">Divorciado (a)</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Duración (estado civil)</label>
+                                <input name="duracion" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">¿Habla otro idioma, lengua o dialecto, distinto al español?</label>
+                                <select class="form-control" name="otroIdioma">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">¿Cuál?</label>
+                                <input name="especifiqueIdioma" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Sabe leer y escribir?</label>
+                                <select class="form-control" name="leerEscribir">
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">¿Requiere de traductor o interprete?</label>
+                                <select class="form-control" name="traductor">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Especificar tipo de traductor</label>
+                                <input name="especifiqueTraductor" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Télefono Fijo</label>
+                                <input name="telefonoFijo" type="tel" pattern="[0-9]{10}" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">Celular</label>
+                                <input name="celular" type="tel" pattern="[0-9]{10}" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">¿Tiene hijos?</label>
+                                <select class="form-control" name="hijos">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="control-label">¿Cuántos?</label>
+                                <input name="nHijos" type="number" value="0" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Con cuántas personas vive?</label>
+                                <input name="nPersonasVive" type="number" value="0" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Cuenta con propiedades en otra localidad, municipio y/o en otro estado o país?</label>
+                                <select class="form-control" name="propiedades">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">CURP</label>
+                                <input name="CURP" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Consume alguna sustancia o droga?</label>
+                                <select class="form-control" name="consumoSustancias">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="proceso" class="panel panel-success">
+                        <div class="panel-heading" style="color:#fff; background-color:#415667; border-color:#415667;">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse2" onclick="mostrar">Proceso</a>
+                            </h4>
+                        </div>
+                        <div id="collapse2" class="panel-collapse collapse">
+                            <div class="form-group">
+                                <label class="control-label">idPersona</label>
+                                <input name="idPersona" type="number" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>        
+    </div>
+
+    
+</div>
+
+<div>
+    <a asp-action="Index">Regresar a lista de usuarios</a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var items = "<option value='0'>Select</option>";
+        $('#lnMunicipio').html.(items);
+    });
+</script>

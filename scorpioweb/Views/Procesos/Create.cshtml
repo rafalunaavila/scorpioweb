@@ -1,0 +1,85 @@
+﻿@model scorpioweb.Models.Proceso
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+<h4>Proceso</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdProceso" class="control-label"></label>
+                <input asp-for="IdProceso" class="form-control" />
+                <span asp-validation-for="IdProceso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CausaPenal" class="control-label"></label>
+                <input asp-for="CausaPenal" class="form-control" />
+                <span asp-validation-for="CausaPenal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Coimputados" class="control-label"></label>
+                <input asp-for="Coimputados" class="form-control" />
+                <span asp-validation-for="Coimputados" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoimputadosSupervision" class="control-label"></label>
+                <input asp-for="CoimputadosSupervision" class="form-control" />
+                <span asp-validation-for="CoimputadosSupervision" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoCoimputadosSupervision" class="control-label"></label>
+                <input asp-for="NoCoimputadosSupervision" class="form-control" />
+                <span asp-validation-for="NoCoimputadosSupervision" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelacionSupervisado" class="control-label"></label>
+                <input asp-for="RelacionSupervisado" class="form-control" />
+                <span asp-validation-for="RelacionSupervisado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelacionLugar" class="control-label"></label>
+                <input asp-for="RelacionLugar" class="form-control" />
+                <span asp-validation-for="RelacionLugar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EspecificaRelacion" class="control-label"></label>
+                <input asp-for="EspecificaRelacion" class="form-control" />
+                <span asp-validation-for="EspecificaRelacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Funcionario" class="control-label"></label>
+                <input asp-for="Funcionario" class="form-control" />
+                <span asp-validation-for="Funcionario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EspecificaFuncionario" class="control-label"></label>
+                <input asp-for="EspecificaFuncionario" class="form-control" />
+                <span asp-validation-for="EspecificaFuncionario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observaciones" class="control-label"></label>
+                <input asp-for="Observaciones" class="form-control" />
+                <span asp-validation-for="Observaciones" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PersonaIdPersona" class="control-label"></label>
+                <input asp-for="PersonaIdPersona" class="form-control" />
+                <span asp-validation-for="PersonaIdPersona" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

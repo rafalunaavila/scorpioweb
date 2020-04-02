@@ -48,7 +48,7 @@ namespace scorpioweb.Controllers
             List<Municipios> municipiosList = new List<Municipios>();
 
             municipiosList = (from Municipios in _context.Municipios
-                              where Municipios.Id == EstadoId
+                              where Municipios.EstadosId == EstadoId
                               select Municipios).ToList();
 
             return Json(new SelectList(municipiosList, "Id", "Municipio"));
@@ -60,6 +60,8 @@ namespace scorpioweb.Controllers
             List<Estados> listaEstados = new List<Estados>();
             listaEstados = (from table in _context.Estados
                             select table).ToList();
+
+            listaEstados.Insert(0, new Estados { Id = 0, Estado = "Selecciona" });
             ViewBag.ListadoEstados = listaEstados;
             return View();
         }

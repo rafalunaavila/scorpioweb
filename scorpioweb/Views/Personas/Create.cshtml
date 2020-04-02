@@ -1,5 +1,50 @@
-﻿
+﻿<script src="/lib/jquery/dist/jquery.js"></script>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        var items = "<option value='0'>Selecciona</option>";
+        $('#lnMunicipio').html(items);
+    });    
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {        
+        $('#lnEstado').change(function () {            
+            var url = '@Url.Content("~/")' + "Personas/GetMunicipio";
+            var ddlsource = '#lnEstado';
+            //alert("url: "+ url);
+            $.getJSON(url, { EstadoId: $(ddlsource).val() }, function (data) {
+                //alert("entrando en JSON");
+                var items = '';
+                $("#lnMunicipio").empty();
+                $.each(data, function (i, municipio) {
+                    items += "<option value='" + municipio.value + "'>" + municipio.text + "</option>";
+                });
+                $('#lnMunicipio').html(items);
+            });            
+        });        
+        $('#lnPais').change(function () {            
+            var selectedCountry = $(this).children("option:selected").val();
+            if (selectedCountry != "MEXICO") {
+                $("#lnEstado").val(0);
+                var items = "<option value='0'>Selecciona</option>";
+                $('#lnMunicipio').html(items);
+                $("#lnMunicipio").val(0);
+                $("#Estado").css("display", "none");
+                $("#Municipio").css("display", "none");
+                $("#Pais, #Localidad").removeClass("col-md-3");
+                $("#Pais, #Localidad").addClass("col-md-6");
+            }
+            else {
+                $("#Estado").css("display", "block");
+                $("#Municipio").css("display", "block");  
+                $("#Pais, #Localidad").removeClass("col-md-6");
+                $("#Pais, #Localidad").addClass("col-md-3");
+            }
+            
+        });        
+    });
+</script>
 
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
@@ -51,9 +96,9 @@
                                 <label class="control-label">Fecha de nacimiento</label>
                                 <input required name="fNacimiento" type="date" class="form-control" />
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-3" id="Pais">
                                 <label class="control-label">País</label>
-                                <select class="form-control" name="lnPais">
+                                <select class="form-control" name="lnPais" id="lnPais">
                                     <option value="MEXICO">México</option>
                                     <option value="ESTADOS UNIDOS">Estados Unidos</option>
                                     <option value="CANADA">Canada</option>
@@ -64,25 +109,21 @@
                                     <option value="OTRO">Otro</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-3" id="Estado">
                                 <label class="control-label">Estado</label>
-                                <select class="form-control" name="lnEstado"
-                                        asp-items="@(new SelectList(ViewBag.ListadoEstados, "Id","Estado"))">                                    
+                                <select class="form-control" name="lnEstado" id="lnEstado"
+                                        asp-items="@(new SelectList(ViewBag.ListadoEstados, "Id","Estado"))">
                                 </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-3" id="Municipio">
                                 <label class="control-label">Municipio</label>
                                 <select class="form-control" name="lnMunicipio" id="lnMunicipio"
-                                        asp-items="@(new SelectList(string.Empty,"Id","Municipio"))">                                    
+                                        asp-items="@(new SelectList(string.Empty,"Id","Municipio"))">
                                 </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-3" id="Localidad">
                                 <label class="control-label">Localidad</label>
-                                <select class="form-control" name="lnLocalidad">
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Femenino</option>
-                                    <option value="N">Prefiero no decirlo</option>
-                                </select>
+                                <input name="lnLocalidad" type="text" class="form-control" />
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Estado Civil</label>
@@ -190,19 +231,13 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
-        </form>        
+        </form>
     </div>
 
-    
+
 </div>
 
 <div>
     <a asp-action="Index">Regresar a lista de usuarios</a>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var items = "<option value='0'>Select</option>";
-        $('#lnMunicipio').html.(items);
-    });
-</script>

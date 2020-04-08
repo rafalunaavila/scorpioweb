@@ -1,4 +1,5 @@
 ﻿<script src="/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/js.cookie.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -63,6 +64,7 @@
 
         });
 
+        /*Combobox Domicilio*/
         $('#estadoD').change(function () {
             var url = '@Url.Content("~/")' + "Personas/GetMunicipio";
             var ddlsource = '#estadoD';
@@ -97,6 +99,44 @@
             }
 
         });
+
+        /*Combobox Domicilio Secundario*/
+        $('#estadoDDS').change(function () {
+            var url = '@Url.Content("~/")' + "Personas/GetMunicipio";
+            var ddlsource = '#estadoDDS';
+            //alert("url: " + url + " ddlsource val: " + $(ddlsource).val());
+            $.getJSON(url, { EstadoId: $(ddlsource).val() }, function (data) {
+                //alert("entrando en JSON");
+                var items = '';
+                $("#municipioDDS").empty();
+                $.each(data, function (i, municipio) {
+                    items += "<option value='" + municipio.value + "'>" + municipio.text + "</option>";
+                });
+                $('#municipioDDS').html(items);
+            });
+        });
+        $('#paisDDS').change(function () {
+            var selectedCountry = $(this).children("option:selected").val();
+            if (selectedCountry != "MEXICO") {
+                 $("#estadoDDS").val(0);
+                var items = "<option value='0'>Selecciona</option>";
+                $('#municipioDDS').html(items);
+                $("#municipioDDS").val(0);
+                $("#EstadoDDS").css("display", "none");
+                $("#MunicipioDDS").css("display", "none");
+                $("#PaisDDS").removeClass("col-md-4");
+                $("#PaisDDS").addClass("col-md-12");
+            }
+            else {
+                $("#EstadoDDS").css("display", "block");
+                $("#MunicipioDDS").css("display", "block");
+                $("#PaisDDS").removeClass("col-md-12");
+                $("#PaisDDS").addClass("col-md-4");
+            }
+
+        });
+        
+
         $('#vividoFuera').change(function () {
             var vivido = $(this).children("option:selected").val();
             if (vivido == "SI") {   
@@ -105,24 +145,125 @@
                 $("#motivoVivido").css("display", "block");
             }
             else {
-                $("#lugaresVividoDentro").empty();
-                $("#tiempoVividoDentro").empty();
-                $("#motivoVividoDentro").empty();
                 $("#lugaresVivido").css("display", "none");
                 $("#tiempoVivido").css("display", "none");
                 $("#motivoVivido").css("display", "none");                
             }
 
         });
+
+        $('#viajaHabitual').change(function () {
+            var viaje = $(this).children("option:selected").val();
+            if (viaje == "SI") {   
+                $("#lugaresViaje").css("display", "block");
+                $("#tiempoViaje").css("display", "block");
+                $("#motivoViaje").css("display", "block");
+            }
+            else {
+                $("#lugaresViaje").css("display", "none");
+                $("#tiempoViaje").css("display", "none");
+                $("#motivoViaje").css("display", "none");                
+            }
+
+        });
+
+        $('#documentacionSalirPais').change(function () {
+            var doc = $(this).children("option:selected").val();
+            if (doc == "SI") {   
+                $("#pasaporte").css("display", "block");
+                $("#visa").css("display", "block");
+            }
+            else {
+                $("#pasaporteDentro option:contains(No)").attr('selected', true);
+                $("#visaDentro option:contains(No)").attr('selected', true);
+                $("#pasaporte").css("display", "none");
+                $("#visa").css("display", "none");
+            }
+
+        });
+        $('#familiaresFuera').change(function () {
+            var fam = $(this).children("option:selected").val();
+            if (fam == "SI") {   
+                $("#cuantosFamiliares").css("display", "block");
+            }
+            else {
+                $("#cuantosFamiliares").css("display", "none"); 
+                $("#cuantosFamiliaresDentro").value(0);
+            }
+        });
+
+        $('#sexo').change(function () {
+            var gen = $(this).children("option:selected").val();
+            if (gen == "F") {   
+                $("#embarazo").css("display", "block");
+            }
+            else {
+                $("#embarazo").css("display", "none"); 
+            }
+        });
+
+
+        $('#enfermedad').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "SI") {   
+                $("#especifiqueEnfermedad").css("display", "block");
+                $("#tratamiento").css("display", "block");
+            }
+            else {
+                $("#especifiqueEnfermedad").css("display", "none"); 
+                $("#tratamiento").css("display", "none"); 
+            }
+
+        });
+        $('#embarazoLactancia').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "SI") {   
+                $("#tiempoEmbarazo").css("display", "block");
+                $("#tratamiento").css("display", "block");
+            }
+            else {
+                $("#tiempoEmbarazo").css("display", "none"); 
+                $("#tratamiento").css("display", "none"); 
+            }
+
+        });
+        $('#discapacidad').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "SI") {   
+                $("#especifiqueDiscapacidad").css("display", "block");
+            }
+            else {
+                $("#especifiqueDiscapacidad").css("display", "none");  
+            }
+
+        });
+        $('#servicioMedico').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "SI") {   
+                $("#especifiqueServicioMedico").css("display", "block");
+                $("#institucionServicioMedico").css("display", "block");
+            }
+            else {
+                $("#especifiqueServicioMedico").css("display", "none"); 
+                $("#especificaServicioMedico").css("display", "none"); 
+            }
+
+        });
+
     });
 </script>
 
+<script type="text/javascript">   
+    function probandoCookie() {   
+        alert(document.cookie);
+    }
+</script>
 
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Crear nuevo registro</h2>
+<h2>Entrevista de encuadre</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -154,7 +295,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Genero</label>
-                                <select class="form-control" name="sexo">
+                                <select required class="form-control" name="sexo" id="sexo">
                                     <option value="M">Masculino</option>
                                     <option value="F">Femenino</option>
                                     <option value="N">Prefiero no decirlo</option>
@@ -311,7 +452,7 @@
                             </div>
                             <div class="form-group col-md-5">
                                 <label class="control-label">Colonia/Fraccionamiento</label>
-                                <input required name="nombreCF" type="text" class="form-control" />
+                                <input required name="nombreCF" type="text" class="form-control" maxlength="45" />
                             </div>
                             <div class="form-group col-md-4" id="PaisD">
                                 <label class="control-label">País</label>
@@ -377,6 +518,107 @@
                                     <option value="No">No</option>
                                     <option value="Si">Si</option>
                                 </select>
+                            </div>
+                        </div>
+                        <!-- Modal Domicilio Secundario -->
+                        <div class="modal fade" id="modalDomicilioSecundario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:#415667;">
+                                        <h5 class="modal-title" style="font-size: 30px; color:#fff;">Domicilio Secundario</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label class="control-label">Motivo del domicilio secundario</label>
+                                            <input name="motivoDS" maxlength="100" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">La propiedad del lugar o del inmueble, es:</label>
+                                            <select class="form-control" name="tipoDomicilioDS">
+                                                <option value="RENTADA">Rentada</option>
+                                                <option value="PRESTADA">Prestada</option>
+                                                <option value="PROPIA">Propia</option>
+                                                <option value="FAMILIAR">Familiar</option>
+                                                <option value="SITACION DE CALLE">Situación de calle</option>
+                                                <option value="IRREGULAR">Irregular</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <label class="control-label">Calle</label>
+                                            <input name="calleDS" type="text" class="form-control" max="200" />
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="control-label">Número</label>
+                                            <input name="noDS" type="text" class="form-control" maxlength="100" />
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                            <label class="control-label">Colonia/Fraccionamiento</label>
+                                            <input name="nombreCFDS" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group col-md-4" id="PaisDDS">
+                                            <label class="control-label">País</label>
+                                            <select class="form-control" name="paisDDS" id="paisDDS">
+                                                <option value="MEXICO">México</option>
+                                                <option value="ESTADOS UNIDOS">Estados Unidos</option>
+                                                <option value="CANADA">Canada</option>
+                                                <option value="COLOMBIA">Colombia</option>
+                                                <option value="EL SALVADOR">El Salvador</option>
+                                                <option value="GUATEMALA">Guatemala</option>
+                                                <option value="CHILE">Chile</option>
+                                                <option value="OTRO">Otro</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4" id="EstadoDDS">
+                                            <label class="control-label">Estado</label>
+                                            <select class="form-control" name="estadoDDS" id="estadoDDS"
+                                                    asp-items="@(new SelectList(ViewBag.ListadoEstados, "Id","Estado"))">
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4" id="MunicipioDDS">
+                                            <label class="control-label">Municipio</label>
+                                            <select class="form-control" name="municipioDDS" id="municipioDDS"
+                                                    asp-items="@(new SelectList(string.Empty,"Id","Municipio"))">
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="control-label">¿Cuánto tiempo ha vivido en este domicilio?</label>
+                                            <select class="form-control" name="temporalidadDS">
+                                                <option value="MAS DE 10 AÑOS">Más de 10 años</option>
+                                                <option value="ENTRE 5 Y 10 AÑOS">Entre 5 y 10 años</option>
+                                                <option value="ENTRE 2 Y 5 AÑOS">Entre 2 y 5 años</option>
+                                                <option value="ENTRE 6 MESES Y 2 AÑOS">Entre 6 meses y 2 años</option>
+                                                <option value="MENOS DE 6 MESES">Menos de 6 meses</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="control-label">¿Este domicilio es su residencia habitual?</label>
+                                            <select class="form-control" name="residenciaHabitualDS">
+                                                <option value="Si">Si</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Código Postal</label>
+                                            <input name="cpDS" type="text" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="referencias">Referencias para ubicar su domicilio</label>
+                                            <textarea maxlength="300" class="form-control" rows="3" name="referenciasDS" id="referenciasDS"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="horario">Días y horario en que se encuentra en el domicilio:</label>
+                                            <textarea maxlength="100" class="form-control" rows="3" name="horarioDS" id="horarioDS"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label class="control-label" for="observaciones">Observaciones</label>
+                                            <textarea maxlength="300" class="form-control" rows="3" name="observacionesDS" id="observaciones"></textarea>
+                                            <small class="form-text text-muted">En caso de tener un 3er domicilio anotarlo aquí</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color:#415667; color:#fff">Cerrar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -569,7 +811,6 @@
                                 <textarea maxlength="300" class="form-control" rows="2" name="observacionesAS" id="observacionesAS"></textarea>
                                 <small class="form-text text-muted">En caso de tener alguna otra actividad mencionarlo aquí</small>
                             </div>
-
                         </div>
                     </div>
                     <div id="datosAbandonoEstado" class="panel panel panel-primary" style="border-color:#000;">
@@ -598,6 +839,134 @@
                                 <label class="control-label">Motivo</label>
                                 <textarea maxlength="200" class="form-control" rows="2" name="motivoVivido" id="motivoVividoDentro"></textarea>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Viaja habitualmente a otros estados o países?</label>
+                                <select required class="form-control" name="viajaHabitual" id="viajaHabitual">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:none" id="lugaresViaje">
+                                <label class="control-label">Si viaja frecuentemente especificar a que lugares viaja</label>
+                                <textarea maxlength="200" class="form-control" rows="2" name="lugaresViaje"></textarea>
+                            </div>
+                            <div class="form-group" style="display:none" id="tiempoViaje">
+                                <label class="control-label">¿Cada cuanto viaja a esos lugares?</label>
+                                <input maxlength="100" name="tiempoViaje" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group" style="display:none" id="motivoViaje">
+                                <label class="control-label">Motivo por el que viaja</label>
+                                <textarea maxlength="200" class="form-control" rows="2" name="motivoViaje"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Cuenta con documentación oficial para entrar y salir de país?</label>
+                                <select required class="form-control" name="documentaciónSalirPais" id="documentacionSalirPais">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="pasaporte" style="display:none">
+                                <label class="control-label">¿Cuenta con pasaporte?</label>
+                                <select required class="form-control" name="pasaporte" id="pasaporteDentro">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="visa" style="display:none">
+                                <label class="control-label">¿Cuenta con visa?</label>
+                                <select required class="form-control" name="visa" id="visaDentro">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Tiene familiares cercanos o amistades residiendo en otro estado o país con los que mantenga comunicación estrecha?</label>
+                                <select required class="form-control" name="familiaresFuera" id="familiaresFuera">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:none" id="cuantosFamiliares">
+                                <label class="control-label">¿Cuántos familiares?</label>
+                                <input name="cuantosFamiliares" type="number" class="form-control" value="0" id="cuantosFamiliaresDentro" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="datosSalud" class="panel panel panel-primary" style="border-color:#fff;">
+                        <div class="panel-heading" style="color:#fff; background-color:#3D7F99; border-color:#3D7F99;">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse7" onclick="mostrar">Salud</a>
+                            </h4>
+                        </div>
+                        <div id="collapse7" class="panel-collapse collapse" style="padding-top:1%;">
+                            <div class="form-group">
+                                <label class="control-label">¿Tiene alguna enfermedad crónica ó degerenativa que dificulte su comparecencia?</label>
+                                <select required class="form-control" name="enfermedad" id="enfermedad">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:none" id="especifiqueEnfermedad">
+                                <label class="control-label">Especifique la enfermedad</label>
+                                <textarea maxlength="100" class="form-control" rows="2" name="especifiqueEnfermedad"></textarea>
+                            </div>
+                            <div class="form-group" id="embarazo" style="display:none">
+                                <label class="control-label">¿Está embarazada o en período de lactancia?</label>
+                                <select required class="form-control" name="embarazoLactancia" id="embarazoLactancia">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:none" id="tiempoEmbarazo">
+                                <label class="control-label">Tiempo de embarazo o lactancia</label>
+                                <input maxlength="100" name="tiempoEmbarazo" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group" style="display:none" id="tratamiento">
+                                <label class="control-label">Tratamiento médico indicado</label>
+                                <textarea maxlength="200" class="form-control" rows="2" name="tratamiento"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Tiene alguna condición física que requiera cuidados especiales?</label>
+                                <select required class="form-control" name="discapacidad" id="discapacidad">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display:none" id="especifiqueDiscapacidad">
+                                <label class="control-label">Específique la discapacidad</label>
+                                <input maxlength="100" class="form-control" type="text" name="especifiqueDiscapacidad" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">¿Cuenta con servicio médico?</label>
+                                <select required class="form-control" name="servicioMedico" id="servicioMedico">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6" id="especifiqueServicioMedico" style="display:none;">
+                                <label class="control-label">¿Qupe tipo de servicio tiene?</label>
+                                <select class="form-control" name="especifiqueServicioMedico">
+                                    <option value="NA">NA</option>
+                                    <option value="SEGURO MEDICO">Seguro Médico</option>
+                                    <option value="DERECHO HABIENTE">Derecho habiente</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6" id="institucionServicioMedico" style="display:none;">
+                                <label class="control-label">Institución prestadora de servicio</label>
+                                <select required class="form-control" name="institucionServicioMedico">
+                                    <option value="NA">NA</option>
+                                    <option value="IMSS">IMSS</option>
+                                    <option value="ISSSTE">ISSSTE</option>
+                                    <option value="SEGURO POPULAR">Seguro Popular</option>
+                                    <option value="MILITAR">Militar</option>
+                                    <option value="OTRO">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="observacionesSalud">Observaciones</label>
+                                <textarea maxlength="200" class="form-control" rows="2" name="observacionesSalud"></textarea>
+                                <small class="form-text text-muted">Observaciones</small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -605,6 +974,7 @@
 
             <div class="form-group">
                 <input type="submit" value="Guardar Registro" class="btn btn-default" />
+                <input type="button" value="Probar cookie" class="btn btn-default" onclick="probandoCookie()" />
             </div>
         </form>
     </div>
@@ -634,26 +1004,7 @@
         </div>
     </div>
 </div>
-<!-- Modal Domicilio Secundario -->
-<div class="modal fade" id="modalDomicilioSecundario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Domicilio Secundario</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <div>
     <a asp-action="Index">Regresar a lista de usuarios</a>

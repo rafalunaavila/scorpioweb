@@ -79,17 +79,23 @@ namespace scorpioweb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial,
+        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario,
             string nombre, string paterno, string materno, string alias, string sexo, int edad, DateTime fNacimiento, string lnPais,
             string lnEstado, string lnMunicipio, string lnLocalidad, string estadoCivil, string duracion, string otroIdioma, string especifiqueIdioma, 
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
             string propiedades, string CURP, string consumoSustancias,
             string tipoDomicilio, string calle, string no, string nombreCF, string paisD, string estadoD, string municipioD, string temporalidad,
-            string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string domicilioSecundario,
+            string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string dbdomicilioSecundario,
+            string motivoDS,string tipoDomicilioDS, string calleDS, string noDS, string nombreCFDS, string paisDDS, string estadoDDS, string municipioDDS, string temporalidadDS,
+            string residenciaHabitualDS, string cpDS, string referenciasDS, string horarioDS, string observacionesDS,
             string estudia, string gradoEstudios, string institucionE, string horarioE, string direccionE, string telefonoE, string observacionesE,
             string trabaja, string tipoOcupacion, string puesto, string empleadorJefe, string enteradoProceso, string sePuedeEnterar, string tiempoTrabajando,
             string salario, string temporalidadSalario, string direccionT, string horarioT, string telefonoT, string observacionesT,
-            string tipoActividad, string horarioAS, string lugarAS, string telefonoAS, string sePuedeEnterarAS, string referenciaAS, string observacionesAS)//[Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización")]
+            string tipoActividad, string horarioAS, string lugarAS, string telefonoAS, string sePuedeEnterarAS, string referenciaAS, string observacionesAS,
+            string vividoFuera, string lugaresVivido, string tiempoVivido, string motivoVivido, string viajaHabitual, string lugaresViaje, string tiempoViaje,
+            string motivoViaje, string documentaciónSalirPais, string pasaporte, string visa, string familiaresFuera, int cuantosFamiliares,
+            string enfermedad, string especifiqueEnfermedad, string embarazoLactancia, string tiempoEmbarazo, string tratamiento, string discapacidad, string especifiqueDiscapacidad,
+            string servicioMedico, string especifiqueServicioMedico, string institucionServicioMedico, string observacionesSalud)//[Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización")]
         {
 
 
@@ -135,7 +141,28 @@ namespace scorpioweb.Controllers
                 domicilio.Municipio = municipioD;
                 domicilio.Temporalidad = temporalidad;
                 domicilio.ResidenciaHabitual = normaliza(residenciaHabitual);
-                domicilio.DomcilioSecundario = normaliza(domicilioSecundario);
+                domicilio.Cp = normaliza(cp);
+                domicilio.Referencias = normaliza(referencias);
+                domicilio.DomcilioSecundario = normaliza(dbdomicilioSecundario);
+                domicilio.Horario = normaliza(horario);
+                domicilio.Observaciones = normaliza(observaciones);
+                #endregion
+
+                #region -Domicilio Secundario-
+                domiciliosecundario.Motivo = motivoDS;
+                domiciliosecundario.TipoDomicilio = tipoDomicilioDS;
+                domiciliosecundario.Calle = normaliza(calleDS);
+                domiciliosecundario.No = normaliza(noDS);
+                domiciliosecundario.NombreCf = normaliza(nombreCFDS);
+                domiciliosecundario.Pais = paisDDS;
+                domiciliosecundario.Estado = estadoDDS;
+                domiciliosecundario.Municipio = municipioDDS;
+                domiciliosecundario.Temporalidad = temporalidadDS;                
+                domiciliosecundario.ResidenciaHabitual = normaliza(residenciaHabitualDS);
+                domiciliosecundario.Cp = normaliza(cpDS);
+                domiciliosecundario.Referencias = normaliza(referenciasDS);
+                domiciliosecundario.Horario = normaliza(horarioDS);
+                domiciliosecundario.Observaciones = normaliza(observacionesDS);
                 #endregion
 
                 #region -Estudios-
@@ -173,6 +200,42 @@ namespace scorpioweb.Controllers
                 actividadsocial.Observaciones = normaliza(observacionesAS);
                 #endregion
 
+                #region -AbandonoEstado-
+                abandonoEstado.VividoFuera = vividoFuera;
+                abandonoEstado.LugaresVivido = normaliza(lugaresVivido);
+                abandonoEstado.TiempoVivido = normaliza(tiempoVivido);
+                abandonoEstado.MotivoVivido = normaliza(motivoVivido);
+                abandonoEstado.ViajaHabitual = viajaHabitual;
+                abandonoEstado.LugaresViaje = normaliza(lugaresViaje);
+                abandonoEstado.TiempoViaje = normaliza(tiempoViaje);
+                abandonoEstado.MotivoViaje = normaliza(motivoViaje);
+                abandonoEstado.DocumentacionSalirPais = documentaciónSalirPais;
+                abandonoEstado.Pasaporte = pasaporte;
+                abandonoEstado.Visa = visa;
+                abandonoEstado.FamiliaresFuera = familiaresFuera;
+                abandonoEstado.Cuantos = cuantosFamiliares;
+                #endregion
+
+                #region -Salud-
+                saludfisica.Enfermedad = enfermedad;
+                saludfisica.EspecifiqueEnfermedad = normaliza(especifiqueEnfermedad);
+                saludfisica.EmbarazoLactancia = embarazoLactancia;
+                saludfisica.Tiempo = normaliza(tiempoEmbarazo);
+                saludfisica.Tratamiento = normaliza(tratamiento);
+                saludfisica.Discapacidad = discapacidad;
+                saludfisica.EspecifiqueDiscapacidad = normaliza(especifiqueDiscapacidad);
+                saludfisica.ServicioMedico = servicioMedico;
+                saludfisica.EspecifiqueServicioMedico = especifiqueServicioMedico;
+                saludfisica.InstitucionServicioMedico = institucionServicioMedico;
+                saludfisica.Observaciones = normaliza(observacionesSalud);
+                #endregion
+
+                #region -IdDomicilio-
+                int idDomicilio = ((from table in _context.Domicilio
+                                    select table).Count()) + 1;
+                domicilio.IdDomicilio = idDomicilio;
+                domiciliosecundario.IdDomicilio = idDomicilio;
+                #endregion
 
                 #region -IdPersona-
                 int idPersona = ((from table in _context.Persona
@@ -182,15 +245,19 @@ namespace scorpioweb.Controllers
                 estudios.PersonaIdPersona = idPersona;
                 trabajo.PersonaIdPersona = idPersona;
                 actividadsocial.PersonaIdPersona = idPersona;
+                abandonoEstado.PersonaIdPersona = idPersona;
+                saludfisica.PersonaIdPersona = idPersona;
                 #endregion
 
                 #region -Añadir a contexto-
-
                 _context.Add(persona);
                 _context.Add(domicilio);
+                _context.Add(domiciliosecundario);
                 _context.Add(estudios);
                 _context.Add(trabajo);
                 _context.Add(actividadsocial);
+                _context.Add(abandonoEstado);
+                _context.Add(saludfisica);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
                 #endregion

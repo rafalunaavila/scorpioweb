@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scorpioweb.Models;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace scorpioweb.Controllers
 {
@@ -22,7 +25,7 @@ namespace scorpioweb.Controllers
 
         // GET: Personas
         public async Task<IActionResult> Index()
-        {
+        {            
             return View(await _context.Persona.ToListAsync());
         }
 
@@ -44,7 +47,19 @@ namespace scorpioweb.Controllers
             return View(persona);
         }
 
+        public ActionResult guardarSustancia(string[] datosConsumo)
+        {
+            return Json(new {message="OK" });
+        }
+
         public JsonResult GetMunicipio(int EstadoId) {
+            //string sesion = HttpContext.Session.GetString("Test");
+            //string no = EstadoId.ToString();
+            //HttpContext.Session.SetString(no, EstadoId.ToString());
+            //string sesion = HttpContext.Session.GetString(no);
+            TempData["message"] = DateTime.Now;
+
+
             List<Municipios> municipiosList = new List<Municipios>();
 
             municipiosList = (from Municipios in _context.Municipios

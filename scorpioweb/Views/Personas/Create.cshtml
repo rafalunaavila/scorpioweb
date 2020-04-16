@@ -1,33 +1,12 @@
-﻿<script src="/lib/jquery/dist/jquery.js"></script>
-<script src="~/js/js.cookie.js"></script>
+﻿@*<script src="/lib/jquery/dist/jquery.js"></script>*@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        //#region -Municipios-
         var items = "<option value='0'>Selecciona</option>";
         $('#lnMunicipio').html(items);
         $('#municipioD').html(items);
-
-        $("#domicilioSecundario").change(function () {
-            var opcion = $(this).children("option:selected").val();
-            //alert("opcion: "+opcion);
-            if (opcion == "Si") {
-                $('#modalDomicilioSecundario').modal('show')
-            }
-            else {
-                $('#modalDomicilioSecundario').modal('hidden')
-            }
-        });
-
-        $("#consumoSustancias").change(function () {
-            var opcion = $(this).children("option:selected").val();
-            //alert("opcion: "+opcion);
-            if (opcion == "Si") {
-                $('#modalConsumoSustancias').modal('show')
-            }
-            else {
-                $('#modalConsumoSustancias').modal('hidden')
-            }
-        });
 
         $('#lnEstado').change(function () {
             var url = '@Url.Content("~/")' + "Personas/GetMunicipio";
@@ -135,8 +114,33 @@
             }
 
         });
+        //#endregion
         
+        //#region -Modales-
+        $("#domicilioSecundario").change(function () {
+            var opcion = $(this).children("option:selected").val();
+            //alert("opcion: "+opcion);
+            if (opcion == "Si") {
+                $('#modalDomicilioSecundario').modal('show')
+            }
+            else {
+                $('#modalDomicilioSecundario').modal('hidden')
+            }
+        });
 
+        $("#consumoSustancias").change(function () {
+            var opcion = $(this).children("option:selected").val();
+            //alert("opcion: "+opcion);
+            if (opcion == "Si") {
+                $('#modalConsumoSustancias').modal('show')
+            }
+            else {
+                $('#modalConsumoSustancias').modal('hidden')
+            }
+        });
+        //#endregion
+  
+        //#region -changeDisplay-
         $('#vividoFuera').change(function () {
             var vivido = $(this).children("option:selected").val();
             if (vivido == "SI") {   
@@ -202,7 +206,6 @@
             }
         });
 
-
         $('#enfermedad').change(function () {
             var dat = $(this).children("option:selected").val();
             if (dat == "SI") {   
@@ -250,13 +253,40 @@
 
         });
 
+        //#endregion
+
+        
+
     });
 </script>
 
 <script type="text/javascript">   
-    function probandoCookie() {   
-        alert(document.cookie);
-    }
+    $(document).ready(function () { 
+        $('#btnGuardarSustancia').on("click",function (e) {
+            e.preventDefault();
+            var s = document.getElementById("sustancia");
+            var f = document.getElementById("frecuenciaS");
+            var sustancia = s.options[s.selectedIndex].value;
+            var frecuencia = f.options[f.selectedIndex].value;
+            var cantidad = document.getElementById("cantidadS").value;
+            var ultimoC = document.getElementById("ultimoConsumo").value;
+            var observaciones = document.getElementById("observacionesConsumo").value;
+
+            $.ajax({                    
+                type: "POST",
+                dataType: "json",
+                url: "/Personas/guardarSustancia",
+                traditional:true,
+                data: {
+                    datosConsumo: [sustancia,frecuencia,cantidad,ultimoC,observaciones],
+                },
+                success: function (data) {
+                    console.log(data.message);
+                }
+            });
+
+        });
+    });
 </script>
 
 @{
@@ -977,6 +1007,16 @@
                 <input type="button" value="Probar cookie" class="btn btn-default" onclick="probandoCookie()" />
             </div>
         </form>
+
+        <form asp-action="probandoSesion">
+            <div class="form-group">
+                <label class="control-label">Numero</label>
+                <input name="numero" type="number" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar Registro" class="btn btn-default" />
+            </div>
+        </form>
     </div>
 
 
@@ -988,19 +1028,60 @@
 <div class="modal fade" id="modalConsumoSustancias" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Consumo de sustancias</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="modal-header" style="background-color:#0078A7;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Consumo de sustancias</h5>
             </div>
             <div class="modal-body">
-                ...
+                <div>
+                    <label class="control-label">Sustancia</label>
+                    <select class="form-control" name="sustancia" id="sustancia">
+                        <option value="ALCOHOL">Alcohol</option>
+                        <option value="MARIHUANA">Marihuana</option>
+                        <option value="COCAINA">Cocaína</option>
+                        <option value="HEROINA">Heroína</option>
+                        <option value="PVC">PVC</option>
+                        <option value="SOLVENTES">Solventes</option>
+                        <option value="FARMACOS">Fármacos</option>
+                        <option value="CEMENTO">Cemento</option>
+                        <option value="CRACK">Crack</option>
+                        <option value="ACIDOS">Ácidos</option>
+                        <option value="TABACO">Tabaco</option>
+                        <option value="METANFETAMINAS">Metanfetaminas</option>
+                        <option value="OTRO">OTRO</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">Sustancia</label>
+                    <select class="form-control" name="frecuenciaS" id="frecuenciaS">
+                        <option value="DIARIO">Diario</option>
+                        <option value="SEMANAL">Semanal</option>
+                        <option value="QUINCENAL">Quincenal</option>
+                        <option value="MENSUAL">Mensual</option>
+                        <option value="BIMESTRAL">Bimestral</option>
+                        <option value="TRIMESTRAL">Trimestral</option>
+                        <option value="SEMESTRAL">Semestral</option>
+                        <option value="ANUAL">Anual</option>
+                        <option value="OCASIONALMENTE">Ocasionalmente</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">Cantidad</label>
+                    <input class="form-control" maxlength="200" name="cantidadS" type="text" id="cantidadS" />
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">Último consumo</label>
+                    <input required name="ultimoConsumo" id="ultimoConsumo" type="date" class="form-control" />
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label" for="observaciones">Observaciones</label>
+                    <textarea maxlength="250" class="form-control" rows="2" name="observacionesConsumo" id="observacionesConsumo"></textarea>
+                    <small class="form-text text-muted">Poner aclaraciones de la sustancia que consume y si selecciono otra sustancia en opciones especificar la sustancia.</small>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarSustancia" name="btnGuardarSustancia">Guardar sustancia</button>
+            </div>            
         </div>
     </div>
 </div>

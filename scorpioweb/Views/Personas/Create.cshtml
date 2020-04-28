@@ -115,7 +115,7 @@
 
         });
         //#endregion
-        
+
         //#region -Modales-
         $("#domicilioSecundario").change(function () {
             var opcion = $(this).children("option:selected").val();
@@ -139,11 +139,11 @@
             }
         });
         //#endregion
-  
+
         //#region -changeDisplay-
         $('#vividoFuera').change(function () {
             var vivido = $(this).children("option:selected").val();
-            if (vivido == "SI") {   
+            if (vivido == "SI") {
                 $("#lugaresVivido").css("display", "block");
                 $("#tiempoVivido").css("display", "block");
                 $("#motivoVivido").css("display", "block");
@@ -151,14 +151,14 @@
             else {
                 $("#lugaresVivido").css("display", "none");
                 $("#tiempoVivido").css("display", "none");
-                $("#motivoVivido").css("display", "none");                
+                $("#motivoVivido").css("display", "none");
             }
 
         });
 
         $('#viajaHabitual').change(function () {
             var viaje = $(this).children("option:selected").val();
-            if (viaje == "SI") {   
+            if (viaje == "SI") {
                 $("#lugaresViaje").css("display", "block");
                 $("#tiempoViaje").css("display", "block");
                 $("#motivoViaje").css("display", "block");
@@ -166,14 +166,14 @@
             else {
                 $("#lugaresViaje").css("display", "none");
                 $("#tiempoViaje").css("display", "none");
-                $("#motivoViaje").css("display", "none");                
+                $("#motivoViaje").css("display", "none");
             }
 
         });
 
         $('#documentacionSalirPais').change(function () {
             var doc = $(this).children("option:selected").val();
-            if (doc == "SI") {   
+            if (doc == "SI") {
                 $("#pasaporte").css("display", "block");
                 $("#visa").css("display", "block");
             }
@@ -187,82 +187,79 @@
         });
         $('#familiaresFuera').change(function () {
             var fam = $(this).children("option:selected").val();
-            if (fam == "SI") {   
+            if (fam == "SI") {
                 $("#cuantosFamiliares").css("display", "block");
             }
             else {
-                $("#cuantosFamiliares").css("display", "none"); 
+                $("#cuantosFamiliares").css("display", "none");
                 $("#cuantosFamiliaresDentro").value(0);
             }
         });
 
         $('#sexo').change(function () {
             var gen = $(this).children("option:selected").val();
-            if (gen == "F") {   
+            if (gen == "F") {
                 $("#embarazo").css("display", "block");
             }
             else {
-                $("#embarazo").css("display", "none"); 
+                $("#embarazo").css("display", "none");
             }
         });
 
         $('#enfermedad').change(function () {
             var dat = $(this).children("option:selected").val();
-            if (dat == "SI") {   
+            if (dat == "SI") {
                 $("#especifiqueEnfermedad").css("display", "block");
                 $("#tratamiento").css("display", "block");
             }
             else {
-                $("#especifiqueEnfermedad").css("display", "none"); 
-                $("#tratamiento").css("display", "none"); 
+                $("#especifiqueEnfermedad").css("display", "none");
+                $("#tratamiento").css("display", "none");
             }
 
         });
         $('#embarazoLactancia').change(function () {
             var dat = $(this).children("option:selected").val();
-            if (dat == "SI") {   
+            if (dat == "SI") {
                 $("#tiempoEmbarazo").css("display", "block");
                 $("#tratamiento").css("display", "block");
             }
             else {
-                $("#tiempoEmbarazo").css("display", "none"); 
-                $("#tratamiento").css("display", "none"); 
+                $("#tiempoEmbarazo").css("display", "none");
+                $("#tratamiento").css("display", "none");
             }
 
         });
         $('#discapacidad').change(function () {
             var dat = $(this).children("option:selected").val();
-            if (dat == "SI") {   
+            if (dat == "SI") {
                 $("#especifiqueDiscapacidad").css("display", "block");
             }
             else {
-                $("#especifiqueDiscapacidad").css("display", "none");  
+                $("#especifiqueDiscapacidad").css("display", "none");
             }
 
         });
         $('#servicioMedico').change(function () {
             var dat = $(this).children("option:selected").val();
-            if (dat == "SI") {   
+            if (dat == "SI") {
                 $("#especifiqueServicioMedico").css("display", "block");
                 $("#institucionServicioMedico").css("display", "block");
             }
             else {
-                $("#especifiqueServicioMedico").css("display", "none"); 
-                $("#especificaServicioMedico").css("display", "none"); 
+                $("#especifiqueServicioMedico").css("display", "none");
+                $("#especificaServicioMedico").css("display", "none");
             }
 
         });
 
         //#endregion
-
-        
-
     });
 </script>
 
-<script type="text/javascript">   
-    $(document).ready(function () { 
-        $('#btnGuardarSustancia').on("click",function (e) {
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnGuardarSustancia').on("click", function (e) {
             e.preventDefault();
             var s = document.getElementById("sustancia");
             var f = document.getElementById("frecuenciaS");
@@ -271,20 +268,38 @@
             var cantidad = document.getElementById("cantidadS").value;
             var ultimoC = document.getElementById("ultimoConsumo").value;
             var observaciones = document.getElementById("observacionesConsumo").value;
+            var user = document.getElementById("usuario").firstChild.nodeValue;
 
-            $.ajax({                    
+            $.ajax({
                 type: "POST",
                 dataType: "json",
                 url: "/Personas/guardarSustancia",
-                traditional:true,
+                traditional: true,
                 data: {
-                    datosConsumo: [sustancia,frecuencia,cantidad,ultimoC,observaciones],
+                    datosConsumo: [sustancia, frecuencia, cantidad, ultimoC, observaciones, user],
                 },
-                success: function (data) {
-                    console.log(data.message);
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.responseText);
+                        document.ready = document.getElementById("sustancia").value = 'ALCOHOL';
+                        document.ready = document.getElementById("frecuenciaS").value = 'DIARIO';
+                        document.ready = document.getElementById("cantidadS").value = '';
+                        document.ready = document.getElementById("ultimoConsumo").value = '';
+                        document.ready = document.getElementById("observacionesConsumo").value = '';
+                        var otraSustancia = confirm("¿Consume alguna otra sustancia?");
+                        if (otraSustancia == true) {
+                            alert("Coloque los datos correspondientes a la nueva susutancia");
+                        } else {
+                            $("#modalConsumoSustancias").modal('hide');
+                        }                        
+                    } else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert("Hubo un error, no se pudieron guardar los datos, contacte con el administrador del sistema");
                 }
             });
-
         });
     });
 </script>
@@ -293,7 +308,9 @@
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
+@ViewBag.Javascript
 <h2>Entrevista de encuadre</h2>
+<h2 id="usuario">iovanni</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -1007,16 +1024,6 @@
                 <input type="button" value="Probar cookie" class="btn btn-default" onclick="probandoCookie()" />
             </div>
         </form>
-
-        <form asp-action="probandoSesion">
-            <div class="form-group">
-                <label class="control-label">Numero</label>
-                <input name="numero" type="number" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Guardar Registro" class="btn btn-default" />
-            </div>
-        </form>
     </div>
 
 
@@ -1078,10 +1085,11 @@
                     <small class="form-text text-muted">Poner aclaraciones de la sustancia que consume y si selecciono otra sustancia en opciones especificar la sustancia.</small>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" id="btnGuardarSustancia" name="btnGuardarSustancia">Guardar sustancia</button>
-            </div>            
+            </div>
         </div>
     </div>
 </div>

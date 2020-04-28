@@ -9,13 +9,15 @@ using Microsoft.EntityFrameworkCore;
 using scorpioweb.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace scorpioweb.Controllers
 {
     public class PersonasController : Controller
     {
         private readonly penas2Context _context;
-
+        public static int contadorSustancia = 0;
+        public static List<List<string>> datosSustancias =new List<List<string>>();
         
 
         public PersonasController(penas2Context context)
@@ -49,14 +51,23 @@ namespace scorpioweb.Controllers
 
         public ActionResult guardarSustancia(string[] datosConsumo)
         {
-            return Json(new {message="OK" });
+            for (int i=0; i < datosConsumo.Length-1;i++)
+            {
+                datosSustancias.Add(new List<String>{ datosConsumo[i], datosConsumo[5]});                
+            }
+
+            return Json(new { success = true, responseText = "Datos Guardados con éxito" });
+
         }
+
+
 
         public JsonResult GetMunicipio(int EstadoId) {
             //string sesion = HttpContext.Session.GetString("Test");
             //string no = EstadoId.ToString();
             //HttpContext.Session.SetString(no, EstadoId.ToString());
             //string sesion = HttpContext.Session.GetString(no);
+            //String[] a = datosSustancias.ToArray();
             TempData["message"] = DateTime.Now;
 
 
@@ -72,6 +83,7 @@ namespace scorpioweb.Controllers
         // GET: Personas/Create
         public IActionResult Create(Estados Estados)
         {
+            //datosSustancias.Clear();
             List<Estados> listaEstados = new List<Estados>();
             listaEstados = (from table in _context.Estados
                             select table).ToList();
@@ -89,12 +101,24 @@ namespace scorpioweb.Controllers
             return normalizar;
         }
 
+        public static DateTime validateDatetime(string value)
+        {
+            try
+            {
+                return DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                return DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            }
+        }
+
         // POST: Personas/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario,
+        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD,
             string nombre, string paterno, string materno, string alias, string sexo, int edad, DateTime fNacimiento, string lnPais,
             string lnEstado, string lnMunicipio, string lnLocalidad, string estadoCivil, string duracion, string otroIdioma, string especifiqueIdioma, 
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
@@ -262,6 +286,22 @@ namespace scorpioweb.Controllers
                 actividadsocial.PersonaIdPersona = idPersona;
                 abandonoEstado.PersonaIdPersona = idPersona;
                 saludfisica.PersonaIdPersona = idPersona;
+                #endregion
+
+                #region -ConsumoSustancias-
+                for (int i=0; i< datosSustancias.Count;i=i+5)
+                {
+                    if (datosSustancias[i][1] == "iovanni") {
+                        consumosustanciasBD.Sustancia = datosSustancias[i][0];
+                        consumosustanciasBD.Frecuencia = datosSustancias[i + 1][0];
+                        consumosustanciasBD.Cantidad = normaliza(datosSustancias[i + 2][0]);
+                        consumosustanciasBD.UltimoConsumo = validateDatetime(datosSustancias[i + 3][0]);
+                        consumosustanciasBD.Observaciones = normaliza(datosSustancias[i + 4][0]);
+                        consumosustanciasBD.PersonaIdPersona = idPersona;
+                        _context.Add(consumosustanciasBD);
+                        await _context.SaveChangesAsync();
+                    }
+                }
                 #endregion
 
                 #region -Añadir a contexto-

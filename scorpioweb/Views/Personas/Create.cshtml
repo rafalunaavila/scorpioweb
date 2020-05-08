@@ -1,6 +1,7 @@
 ﻿@*<script src="/lib/jquery/dist/jquery.js"></script>*@
 
 <script type="text/javascript">
+    var tipo = 0;
     $(document).ready(function () {
 
         //#region -Municipios-
@@ -138,6 +139,31 @@
                 $('#modalConsumoSustancias').modal('hidden')
             }
         });
+
+        $("#AsientoFamiliar").change(function () {
+            var opcion = $(this).children("option:selected").val();
+            document.getElementById("textoAFR").innerHTML = "Asiento Familiar";
+            if (opcion == "Si") {
+                tipo = 1;
+                $('#modalAsientoFamiliar').modal('show')
+            }
+            else {
+                tipo = 0;
+                $('#modalAsientoFamiliar').modal('hidden')
+            }
+        });
+        $("#ReferenciasPersonales").change(function () {
+            var opcion = $(this).children("option:selected").val();
+            document.getElementById("textoAFR").innerHTML = "Referencia";
+            if (opcion == "Si") {
+                tipo = 2;
+                $('#modalAsientoFamiliar').modal('show')
+            }
+            else {
+                tipo = 0;
+                $('#modalAsientoFamiliar').modal('hidden')
+            }
+        });
         //#endregion
 
         //#region -changeDisplay-
@@ -253,14 +279,48 @@
 
         });
 
+        $('#AFDependencia').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "SI") {
+                $("#AFDependenciaExplica").css("display", "block");
+            }
+            else {
+                $("#AFDependenciaExplica").css("display", "none");
+            }
+
+        });
+
+        $('#AFVivenJuntos').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "NO") {
+                $("#AFDireccionFamiliar").css("display", "block");
+            }
+            else {
+                $("#AFDireccionFamiliar").css("display", "none");
+            }
+
+        });
+
+        $('#AFEnteradoProceso').change(function () {
+            var dat = $(this).children("option:selected").val();
+            if (dat == "NO") {
+                $("#AFPuedeEnterarse").css("display", "block");
+            }
+            else {
+                $("#AFPuedeEnterarse").css("display", "none");
+            }
+
+        });
+
         //#endregion
     });
-</script>
 
-<script type="text/javascript">
+    
+
     $(document).ready(function () {
         $('#btnGuardarSustancia').on("click", function (e) {
             e.preventDefault();
+            alert("tipo: " + tipo);
             var s = document.getElementById("sustancia");
             var f = document.getElementById("frecuenciaS");
             var sustancia = s.options[s.selectedIndex].value;
@@ -291,7 +351,81 @@
                             alert("Coloque los datos correspondientes a la nueva susutancia");
                         } else {
                             $("#modalConsumoSustancias").modal('hide');
-                        }                        
+                        }
+                    } else {
+                        alert(response.responseText);
+                    }
+                },
+                error: function (response) {
+                    alert("Hubo un error, no se pudieron guardar los datos, contacte con el administrador del sistema");
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#btnGuardarFamiliar').on("click", function (e) {
+            e.preventDefault();
+            var r = document.getElementById("AFRelacion");
+            var g = document.getElementById("AFSexo");
+            var d = document.getElementById("AFDependencia");
+            var v = document.getElementById("AFVivenJuntos");
+            var p = document.getElementById("AFEnteradoProceso");
+            var e = document.getElementById("AFPuedeEnterarseO");
+
+            var nombre = document.getElementById("AFNombre").value;
+            var relacion = r.options[r.selectedIndex].value; /////////////////
+            var edad = document.getElementById("AFEdad").value;
+            var sexo = g.options[g.selectedIndex].value; /////////////////
+            var dependencia = d.options[d.selectedIndex].value;/////////////////
+            var explicaDependencia = document.getElementById("AFDependenciaExplicaO").value;
+            var vivenJuntos = v.options[v.selectedIndex].value;/////////////////
+            var direccion = document.getElementById("AFDireccionFamiliarO").value;
+            var telefono = document.getElementById("AFtelefonoFamiliar").value;
+            var horarioLocalizacion = document.getElementById("AFLocalizacion").value;
+            var enteradoProceso = p.options[p.selectedIndex].value;/////////////////
+            var puedeEnterarse = e.options[e.selectedIndex].value;/////////////////
+            var observaciones = document.getElementById("AFobservacionesConsumo").value;
+            var user = document.getElementById("usuario").firstChild.nodeValue;
+
+
+
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/Personas/guardarFamiliar",
+                traditional: true,
+                data: {
+                    datosFamiliar: [nombre, relacion, edad, sexo, dependencia, explicaDependencia, vivenJuntos, direccion, telefono, horarioLocalizacion, enteradoProceso, puedeEnterarse, observaciones, user],
+                    tipoGuardado: tipo,
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.responseText);
+                        document.ready = document.getElementById("AFNombre").value = '';
+                        document.ready = document.getElementById("AFRelacion").value = 'MAMA';
+                        document.ready = document.getElementById("AFEdad").value = '0';
+                        document.ready = document.getElementById("AFSexo").value = 'M';
+                        document.ready = document.getElementById("AFDependencia").value = 'NO';
+                        document.ready = document.getElementById("AFDependenciaExplicaO").value = '';
+                        document.ready = document.getElementById("AFVivenJuntos").value = 'SI';
+                        document.ready = document.getElementById("AFDireccionFamiliarO").value = '';
+                        document.ready = document.getElementById("AFtelefonoFamiliar").value = '';
+                        document.ready = document.getElementById("AFLocalizacion").value = '';
+                        document.ready = document.getElementById("AFEnteradoProceso").value = 'SI';
+                        document.ready = document.getElementById("AFPuedeEnterarseO").value = 'NO';
+                        document.ready = document.getElementById("AFobservacionesConsumo").value = '';
+                        $("#AFDependenciaExplica").css("display", "none");
+                        $("#AFDireccionFamiliar").css("display", "none");
+                        $("#AFPuedeEnterarse").css("display", "none");
+
+                        var otraSustancia = confirm("¿Agregar otra persona?");
+                        if (otraSustancia == true) {
+                            alert("Coloque los datos correspondientes");
+                        } else {
+                            $("#modalAsientoFamiliar").modal('hide');
+                        }
                     } else {
                         alert(response.responseText);
                     }
@@ -449,7 +583,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">¿Con cuántas personas vive?</label>
-                                <input name="nPersonasVive" type="number" value="0" class="form-control" />
+                                <input name="nPersonasVive" id="nPersonasVive" type="number" value="0" class="form-control" />
                             </div>
                             <div class="form-group">
                                 <label class="control-label">¿Cuenta con propiedades en otra localidad, municipio y/o en otro estado o país?</label>
@@ -465,6 +599,20 @@
                             <div class="form-group">
                                 <label class="control-label">¿Consume alguna sustancia o droga?</label>
                                 <select class="form-control" name="consumoSustancias" id="consumoSustancias">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Añadir Familiares</label>
+                                <select class="form-control" name="AsientoFamiliar" id="AsientoFamiliar">
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Añadir Referencias</label>
+                                <select class="form-control" name="ReferenciasPersonales" id="ReferenciasPersonales">
                                     <option value="No">No</option>
                                     <option value="Si">Si</option>
                                 </select>
@@ -1093,6 +1241,104 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Aiento Familiar -->
+<div class="modal fade" id="modalAsientoFamiliar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0078A7;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;" id="textoAFR"></h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Nombre</label>
+                    <input class="form-control" maxlength="150" name="AFNombre" type="text" id="AFNombre" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Relación</label>
+                    <select class="form-control" name="AFRelacion" id="AFRelacion">
+                        <option value="MAMA">Máma</option>
+                        <option value="PAPA">Pápa</option>
+                        <option value="HERMANO (A)">Hermano(a)</option>
+                        <option value="HIJO (A)">Hijo(a)</option>
+                        <option value="ABUELO (A)">Abuelo(a)</option>
+                        <option value="FAMILIAR 1 NIVEL">Familiar 1 nivel</option>
+                        <option value="AMIGO">Amigo</option>
+                        <option value="CONOCIDO">Conocido</option>
+                        <option value="OTRO">OTRO</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Edad</label>
+                    <input class="form-control" value="0" name="AFEdad" type="text" id="AFEdad" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Genero</label>
+                    <select required class="form-control" name="AFSexo" id="AFSexo">
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                        <option value="N">Prefiero no decirlo</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">¿Depende en algo de él?</label>
+                    <select required class="form-control" name="AFDependencia" id="AFDependencia">
+                        <option value="NO">No</option>
+                        <option value="SI">Si</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%; display:none;" id="AFDependenciaExplica">
+                    <label class="control-label" for="AFDependenciaExplica">Explicar en que depende de él y cada cuanto</label>
+                    <textarea maxlength="250" class="form-control" rows="2" name="AFDependenciaExplica" id="AFDependenciaExplicaO"></textarea>
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">¿Vive con él?</label>
+                    <select required class="form-control" name="AFVivenJuntos" id="AFVivenJuntos">
+                        <option value="SI">Si</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%; display:none;" id="AFDireccionFamiliar">
+                    <label class="control-label">Dirección</label>
+                    <input class="form-control" maxlength="200" name="AFDireccionFamiliar" id="AFDireccionFamiliarO" type="text" />
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">Teléfono (10 dígitos)</label>
+                    <input name="AFtelefonoFamiliar" id="AFtelefonoFamiliar" type="tel" pattern="[0-9]{10}" maxlength="10" class="form-control" />
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label" for="AFDependenciaExplica">Días y horarios en que se encuentra</label>
+                    <textarea maxlength="200" class="form-control" rows="2" name="AFLocalizacion" id="AFLocalizacion"></textarea>
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label">¿Enterado de su proceso penal?</label>
+                    <select required class="form-control" name="AFEnteradoProceso" id="AFEnteradoProceso">
+                        <option value="SI">Si</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%; display:none;" id="AFPuedeEnterarse">
+                    <label class="control-label">¿Se puede enterar?</label>
+                    <select required class="form-control" name="AFPuedeEnterarse" id="AFPuedeEnterarseO">
+                        <option value="NA">NA</option>
+                        <option value="NO">No</option>
+                        <option value="SI">Si</option>
+                    </select>
+                </div>
+                <div style="padding-top:1%;">
+                    <label class="control-label" for="AFobservaciones">Observaciones</label>
+                    <textarea maxlength="250" class="form-control" rows="2" name="AFobservacionesConsumo" id="AFobservacionesConsumo"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarFamiliar" name="btnGuardarFamiliar">Guardar Familiar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div>

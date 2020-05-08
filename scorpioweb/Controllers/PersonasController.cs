@@ -18,7 +18,9 @@ namespace scorpioweb.Controllers
         private readonly penas2Context _context;
         public static int contadorSustancia = 0;
         public static List<List<string>> datosSustancias =new List<List<string>>();
-        
+        public static List<List<string>> datosFamiliares = new List<List<string>>();
+        public static List<List<string>> datosReferencias = new List<List<string>>();
+
 
         public PersonasController(penas2Context context)
         {
@@ -60,14 +62,31 @@ namespace scorpioweb.Controllers
 
         }
 
+        public ActionResult guardarFamiliar(string[] datosFamiliar, int tipoGuardado)
+        {
+            if (tipoGuardado == 1)
+            {
+                for (int i = 0; i < datosFamiliar.Length - 1; i++)
+                {
+                    datosFamiliares.Add(new List<String> { datosFamiliar[i], datosFamiliar[13] });
+                }
+            }
+            else if (tipoGuardado==2)
+            {
+                for (int i = 0; i < datosFamiliar.Length - 1; i++)
+                {
+                    datosReferencias.Add(new List<String> { datosFamiliar[i], datosFamiliar[13] });
+                }
+            }
+            
+
+            return Json(new { success = true, responseText = "Datos Guardados con éxito" });
+
+        }
+
 
 
         public JsonResult GetMunicipio(int EstadoId) {
-            //string sesion = HttpContext.Session.GetString("Test");
-            //string no = EstadoId.ToString();
-            //HttpContext.Session.SetString(no, EstadoId.ToString());
-            //string sesion = HttpContext.Session.GetString(no);
-            //String[] a = datosSustancias.ToArray();
             TempData["message"] = DateTime.Now;
 
 
@@ -105,11 +124,11 @@ namespace scorpioweb.Controllers
         {
             try
             {
-                return DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                return DateTime.Parse(value, new System.Globalization.CultureInfo("pt-BR"));
             }
             catch
             {
-                return DateTime.ParseExact("01/01/1900", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                return DateTime.ParseExact("1900/01/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
             }
         }
 
@@ -118,7 +137,7 @@ namespace scorpioweb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD,
+        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar,
             string nombre, string paterno, string materno, string alias, string sexo, int edad, DateTime fNacimiento, string lnPais,
             string lnEstado, string lnMunicipio, string lnLocalidad, string estadoCivil, string duracion, string otroIdioma, string especifiqueIdioma, 
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
@@ -291,7 +310,8 @@ namespace scorpioweb.Controllers
                 #region -ConsumoSustancias-
                 for (int i=0; i< datosSustancias.Count;i=i+5)
                 {
-                    if (datosSustancias[i][1] == "iovanni") {
+                    if (datosSustancias[i][1] == "iovanni")
+                    { /*Revisar el cambio de variable "iovanni" por a variable de usuario*/ 
                         consumosustanciasBD.Sustancia = datosSustancias[i][0];
                         consumosustanciasBD.Frecuencia = datosSustancias[i + 1][0];
                         consumosustanciasBD.Cantidad = normaliza(datosSustancias[i + 2][0]);
@@ -299,6 +319,31 @@ namespace scorpioweb.Controllers
                         consumosustanciasBD.Observaciones = normaliza(datosSustancias[i + 4][0]);
                         consumosustanciasBD.PersonaIdPersona = idPersona;
                         _context.Add(consumosustanciasBD);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                #endregion
+
+                #region -AsientoFamiliar-
+                for(int i=0; i < datosFamiliares.Count; i = i + 13)
+                {
+                    if (datosFamiliares[i][1] == "iovanni")
+                    {
+                        asientoFamiliar.Nombre = normaliza(datosFamiliares[i][0]);
+                        asientoFamiliar.Relacion = datosFamiliares[i + 1][0];
+                        asientoFamiliar.Edad = Int32.Parse(datosFamiliares[i+2][0]);
+                        asientoFamiliar.Sexo = datosFamiliares[i + 3][0];
+                        asientoFamiliar.Dependencia = datosFamiliares[i+4][0];
+                        asientoFamiliar.DependenciaExplica = normaliza(datosFamiliares[i+5][0]);
+                        asientoFamiliar.VivenJuntos = datosFamiliares[i+6][0];
+                        asientoFamiliar.Domicilio = normaliza(datosFamiliares[i + 7][0]);
+                        asientoFamiliar.Telefono = datosFamiliares[i + 8][0];
+                        asientoFamiliar.HorarioLocalizacion = normaliza(datosFamiliares[i + 9][0]);
+                        asientoFamiliar.EnteradoProceso = datosFamiliares[i + 10][0];
+                        asientoFamiliar.PuedeEnterarse = datosFamiliares[i + 11][0];
+                        asientoFamiliar.Observaciones = normaliza(datosFamiliares[i + 12][0]);
+                        asientoFamiliar.PersonaIdPersona = idPersona;
+                        _context.Add(asientoFamiliar);
                         await _context.SaveChangesAsync();
                     }
                 }

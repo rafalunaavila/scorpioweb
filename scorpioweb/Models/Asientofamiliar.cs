@@ -18,7 +18,7 @@ namespace scorpioweb.Models
         public string HorarioLocalizacion { get; set; }
         public string EnteradoProceso { get; set; }
         public string PuedeEnterarse { get; set; }
-        public string Ocupacion { get; set; }
+        public string Tipo { get; set; }
         public string TiempoHabitando { get; set; }
         public string Observaciones { get; set; }
         public int PersonaIdPersona { get; set; }

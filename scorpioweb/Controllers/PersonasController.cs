@@ -20,6 +20,7 @@ namespace scorpioweb.Controllers
         public static List<List<string>> datosSustancias =new List<List<string>>();
         public static List<List<string>> datosFamiliares = new List<List<string>>();
         public static List<List<string>> datosReferencias = new List<List<string>>();
+        public static List<List<string>> datosFamiliaresExtranjero = new List<List<string>>();
 
 
         public PersonasController(penas2Context context)
@@ -84,7 +85,16 @@ namespace scorpioweb.Controllers
 
         }
 
+        public ActionResult guardarFamiliarExtranjero(string[] datosFE)
+        {
+            for (int i = 0; i < datosFE.Length - 1; i++)
+            {
+                datosFamiliaresExtranjero.Add(new List<String> { datosFE[i], datosFE[12] });
+            }
 
+            return Json(new { success = true, responseText = "Datos Guardados con éxito" });
+
+        }
 
         public JsonResult GetMunicipio(int EstadoId) {
             TempData["message"] = DateTime.Now;
@@ -132,12 +142,9 @@ namespace scorpioweb.Controllers
             }
         }
 
-        // POST: Personas/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar,
+        public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar, Familiaresforaneos familiaresForaneos,
             string nombre, string paterno, string materno, string alias, string sexo, int edad, DateTime fNacimiento, string lnPais,
             string lnEstado, string lnMunicipio, string lnLocalidad, string estadoCivil, string duracion, string otroIdioma, string especifiqueIdioma, 
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
@@ -151,7 +158,7 @@ namespace scorpioweb.Controllers
             string salario, string temporalidadSalario, string direccionT, string horarioT, string telefonoT, string observacionesT,
             string tipoActividad, string horarioAS, string lugarAS, string telefonoAS, string sePuedeEnterarAS, string referenciaAS, string observacionesAS,
             string vividoFuera, string lugaresVivido, string tiempoVivido, string motivoVivido, string viajaHabitual, string lugaresViaje, string tiempoViaje,
-            string motivoViaje, string documentaciónSalirPais, string pasaporte, string visa, string familiaresFuera, int cuantosFamiliares,
+            string motivoViaje, string documentaciónSalirPais, string pasaporte, string visa, string familiaresFuera,
             string enfermedad, string especifiqueEnfermedad, string embarazoLactancia, string tiempoEmbarazo, string tratamiento, string discapacidad, string especifiqueDiscapacidad,
             string servicioMedico, string especifiqueServicioMedico, string institucionServicioMedico, string observacionesSalud)//[Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización")]
         {
@@ -271,7 +278,7 @@ namespace scorpioweb.Controllers
                 abandonoEstado.Pasaporte = pasaporte;
                 abandonoEstado.Visa = visa;
                 abandonoEstado.FamiliaresFuera = familiaresFuera;
-                abandonoEstado.Cuantos = cuantosFamiliares;
+                //abandonoEstado.Cuantos = cuantosFamiliares;
                 #endregion
 
                 #region -Salud-
@@ -342,8 +349,59 @@ namespace scorpioweb.Controllers
                         asientoFamiliar.EnteradoProceso = datosFamiliares[i + 10][0];
                         asientoFamiliar.PuedeEnterarse = datosFamiliares[i + 11][0];
                         asientoFamiliar.Observaciones = normaliza(datosFamiliares[i + 12][0]);
+                        asientoFamiliar.Tipo = "FAMILIAR";
                         asientoFamiliar.PersonaIdPersona = idPersona;
                         _context.Add(asientoFamiliar);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                #endregion
+
+                #region -Referencias-
+                for (int i = 0; i < datosReferencias.Count; i = i + 13)
+                {
+                    if (datosReferencias[i][1] == "iovanni")
+                    {
+                        asientoFamiliar.Nombre = normaliza(datosReferencias[i][0]);
+                        asientoFamiliar.Relacion = datosReferencias[i + 1][0];
+                        asientoFamiliar.Edad = Int32.Parse(datosReferencias[i + 2][0]);
+                        asientoFamiliar.Sexo = datosReferencias[i + 3][0];
+                        asientoFamiliar.Dependencia = datosReferencias[i + 4][0];
+                        asientoFamiliar.DependenciaExplica = normaliza(datosReferencias[i + 5][0]);
+                        asientoFamiliar.VivenJuntos = datosReferencias[i + 6][0];
+                        asientoFamiliar.Domicilio = normaliza(datosReferencias[i + 7][0]);
+                        asientoFamiliar.Telefono = datosReferencias[i + 8][0];
+                        asientoFamiliar.HorarioLocalizacion = normaliza(datosReferencias[i + 9][0]);
+                        asientoFamiliar.EnteradoProceso = datosReferencias[i + 10][0];
+                        asientoFamiliar.PuedeEnterarse = datosReferencias[i + 11][0];
+                        asientoFamiliar.Observaciones = normaliza(datosReferencias[i + 12][0]);
+                        asientoFamiliar.Tipo = "REFERENCIA";
+                        asientoFamiliar.PersonaIdPersona = idPersona;
+                        _context.Add(asientoFamiliar);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                #endregion
+
+                #region -Familiares Extranjero-
+                for (int i = 0; i < datosFamiliaresExtranjero.Count; i = i + 12)
+                {
+                    if (datosFamiliaresExtranjero[i][1] == "iovanni")
+                    {
+                        familiaresForaneos.Nombre = normaliza(datosFamiliaresExtranjero[i][0]);
+                        familiaresForaneos.Relacion = datosFamiliaresExtranjero[i + 1][0];
+                        familiaresForaneos.Edad = Int32.Parse(datosFamiliaresExtranjero[i + 2][0]);
+                        familiaresForaneos.Sexo = datosFamiliaresExtranjero[i + 3][0];
+                        familiaresForaneos.TiempoConocerlo = datosFamiliaresExtranjero[i + 4][0];
+                        familiaresForaneos.Pais = datosFamiliaresExtranjero[i + 5][0];
+                        familiaresForaneos.Estado = normaliza(datosFamiliaresExtranjero[i + 6][0]);
+                        familiaresForaneos.Telefono = normaliza(datosFamiliaresExtranjero[i + 7][0]);
+                        familiaresForaneos.FrecuenciaContacto = datosFamiliaresExtranjero[i + 8][0];
+                        familiaresForaneos.EnteradoProceso = datosFamiliaresExtranjero[i + 9][0];
+                        familiaresForaneos.PuedeEnterarse = datosFamiliaresExtranjero[i + 10][0];
+                        familiaresForaneos.Observaciones = normaliza(datosFamiliaresExtranjero[i + 11][0]);
+                        familiaresForaneos.PersonaIdPersona = idPersona;
+                        _context.Add(familiaresForaneos);
                         await _context.SaveChangesAsync();
                     }
                 }

@@ -63,9 +63,6 @@ namespace scorpioweb.Controllers
                                      join nacimientoMunicipio in municipios on (Int32.Parse(persona.Lnmunicipio)) equals nacimientoMunicipio.Id
                                      join domicilioEstado in estados on (Int32.Parse(domicilio.Estado)) equals domicilioEstado.Id
                                      join domicilioMunicipio in municipios on (Int32.Parse(domicilio.Municipio)) equals domicilioMunicipio.Id
-                                     join domicilioSec in domicilioSecundarioVM on domicilio.IdDomicilio equals domicilioSec.IdDomicilio
-                                     join domicilioSecEstado in estados on (Int32.Parse(domicilioSec.Estado)) equals domicilioSecEstado.Id
-                                     join domicilioSecMunicipio in municipios on (Int32.Parse(domicilioSec.Municipio)) equals domicilioSecMunicipio.Id
                                      where personaTable.IdPersona == id
                                     select new PersonaViewModel
                                     {
@@ -76,20 +73,27 @@ namespace scorpioweb.Controllers
                                         municipiosVMPersona=nacimientoMunicipio,
                                         estadosVMDomicilio = domicilioEstado,
                                         municipiosVMDomicilio= domicilioMunicipio,
-                                        domicilioSecundarioVM= domicilioSec,
-                                        estadosVMDomicilioSec= domicilioSecEstado,
-                                        municipiosVMDomicilioSec= domicilioSecMunicipio
                                     };
 
+            ViewData["joinTablesDomSec"] = from personaTable in personaVM
+                                     join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
+                                           join domicilioSec in domicilioSecundarioVM.DefaultIfEmpty() on domicilio.IdDomicilio equals domicilioSec.IdDomicilio
+                                           join domicilioSecEstado in estados on (Int32.Parse(domicilioSec.Estado)) equals domicilioSecEstado.Id
+                                           join domicilioSecMunicipio in municipios on (Int32.Parse(domicilioSec.Municipio)) equals domicilioSecMunicipio.Id
+                                           where personaTable.IdPersona == id
+                                     select new PersonaViewModel
+                                     {
+                                         domicilioSecundarioVM = domicilioSec,
+                                         estadosVMDomicilioSec = domicilioSecEstado,
+                                         municipiosVMDomicilioSec = domicilioSecMunicipio
+                                     };
 
-            //int idPersona = ((from table in _context.Persona
-            //                  select table).Count()) + 1;
             if (persona == null)
             {
                 return NotFound();
             }
 
-            return View(ViewData["joinTables"]);
+            return View();
         }
         #endregion
 
@@ -195,7 +199,7 @@ namespace scorpioweb.Controllers
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
             string propiedades, string CURP, string consumoSustancias,
             string tipoDomicilio, string calle, string no, string nombreCF, string paisD, string estadoD, string municipioD, string temporalidad,
-            string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string domicilioSecundario,
+            string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string cuentaDomicilioSecundario,
             string motivoDS,string tipoDomicilioDS, string calleDS, string noDS, string nombreCFDS, string paisDDS, string estadoDDS, string municipioDDS, string temporalidadDS,
             string residenciaHabitualDS, string cpDS, string referenciasDS, string horarioDS, string observacionesDS,
             string estudia, string gradoEstudios, string institucionE, string horarioE, string direccionE, string telefonoE, string observacionesE,
@@ -253,7 +257,7 @@ namespace scorpioweb.Controllers
                 domicilio.ResidenciaHabitual = normaliza(residenciaHabitual);
                 domicilio.Cp = normaliza(cp);
                 domicilio.Referencias = normaliza(referencias);
-                domicilio.DomcilioSecundario = domicilioSecundario;
+                domicilio.DomcilioSecundario = cuentaDomicilioSecundario;
                 domicilio.Horario = normaliza(horario);
                 domicilio.Observaciones = normaliza(observaciones);
                 #endregion

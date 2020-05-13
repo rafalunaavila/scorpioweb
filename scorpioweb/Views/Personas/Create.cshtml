@@ -118,10 +118,10 @@
         //#endregion
 
         //#region -Modales-
-        $("#domicilioSecundario").change(function () {
+        $("#cuentaDomicilioSecundario").change(function () {
             var opcion = $(this).children("option:selected").val();
             //alert("opcion: "+opcion);
-            if (opcion == "Si") {
+            if (opcion == "SI") {
                 $('#modalDomicilioSecundario').modal('show')
             }
             else {
@@ -689,7 +689,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">CURP</label>
-                                <input name="CURP" type="text" maxlength="16" class="form-control" />
+                                <input name="CURP" type="text" maxlength="18" class="form-control" />
                             </div>
                             <div class="form-group">
                                 <label class="control-label">¿Consume alguna sustancia o droga?</label>
@@ -804,9 +804,9 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">¿Cuenta con domicilio secundario?</label>
-                                <select required class="form-control" name="domicilioSecundario" id="domicilioSecundario">
-                                    <option value="No">No</option>
-                                    <option value="Si">Si</option>
+                                <select required class="form-control" name="cuentaDomicilioSecundario" id="cuentaDomicilioSecundario">
+                                    <option value="NO">No</option>
+                                    <option value="SI">Si</option>
                                 </select>
                             </div>
                         </div>
@@ -1264,7 +1264,6 @@
 
             <div class="form-group">
                 <input type="submit" value="Guardar Registro" class="btn btn-default" />
-                <input type="button" value="Probar cookie" class="btn btn-default" onclick="probandoCookie()" />
             </div>
         </form>
     </div>

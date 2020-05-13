@@ -1,11 +1,11 @@
 ﻿@{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
-    <link rel="stylesheet" type="text/css" href="~/css/tabla.css">
+<link rel="stylesheet" type="text/css" href="~/css/tabla.css">
 <h2>Detalles</h2>
 
-    @foreach (var item in ViewData["joinTables"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
-    {
+@foreach (var item in ViewData["joinTables"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+{
     <div class="table-responsive-lg">
         <div class="container">
             <div class="panel-group">
@@ -83,7 +83,13 @@
                             </tr>
                             <tr>
                                 <td class="estiloDG" colspan="1" style="width:25%">Consume sustancias o drogas</td>
-                                <td colspan="3">@item.personaVM.ConsumoSustancias</td>
+                                <td colspan="2">@item.personaVM.ConsumoSustancias</td>
+                                @if (@item.personaVM.ConsumoSustancias == "SI")
+                                {
+                                    <td colspan="1">
+                                        <a data-toggle="modal" data-target="#modalConsumoSustancias">Ver sustancias</a>
+                                    </td>
+                                }
                             </tr>
                         </table>
                     </div>
@@ -133,28 +139,61 @@
                                     </td>
                                 }
                             </tr>
-                            
+
+                        </table>
+                    </div>
+                </div>
+                <div id="datosEscolaridad" class="panel panel panel-primary" style="border-color:#fff;">
+                    <div class="panel-heading" style="color:#fff; background-color:#848F95; border-color:#848F95;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse3" onclick="mostrar">Escolaridad</a>
+                        </h4>
+                    </div>
+                    <div id="collapse3" class="panel-collapse collapse" style="padding-top:1%;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="estiloEstudios">Actualmente estudia</td>
+                                <td>@item.estudiosVM.Estudia</td>
+                                <td class="estiloEstudios">Último grado de estudios</td>
+                                <td>@item.estudiosVM.GradoEstudios</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloEstudios">Institución</td>
+                                <td>@item.estudiosVM.InstitucionE</td>
+                                <td class="estiloEstudios">Horarios</td>
+                                <td>@item.estudiosVM.Horario</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloEstudios">Dirección</td>
+                                <td>@item.estudiosVM.Direccion</td>
+                                <td class="estiloEstudios">Teléfono</td>
+                                <td>@item.estudiosVM.Telefono</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloEstudios" colspan="1" style="width:25%">Observaciones</td>
+                                <td colspan="3">@item.estudiosVM.Observaciones</td>
+                            </tr>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    }
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+}
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 
-
-    <div class="modal fade" id="modalDomicilioSecundario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:#415667;">
-                    <h5 class="modal-title" style="font-size: 30px; color:#fff;">Domicilio Secundario</h5>
-                </div>
-                <div class="modal-body">
-                    @foreach (var item in ViewData["joinTablesDomSec"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
-                    {
+<!-- Modal Domicilio Secundario -->
+<div class="modal fade" id="modalDomicilioSecundario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#415667;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Domicilio Secundario</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in ViewData["joinTablesDomSec"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                {
                     <table class="table table-bordered">
                         <tr>
                             <td class="estiloDomicilio" colspan="1" style="width:25%">Motivo del domicilio secundario</td>
@@ -188,12 +227,51 @@
                             <td colspan="3">@item.domicilioSecundarioVM.Observaciones</td>
                         </tr>
                     </table>
-                    }
+                }
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal Domicilio Secundario -->
+<div class="modal fade" id="modalConsumoSustancias" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#415667;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Consumo de sustancias</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in ViewData["joinTablesConsumoSustancias"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                {
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="estiloDG" style="width:25%">Sustancia</td>
+                        <td style="width:25%">@item.consumoSustanciasVM.Sustancia</td>
+                        <td class="estiloDG" style="width:25%">Frecuencia de consumo</td>
+                        <td style="width:25%">@item.consumoSustanciasVM.Frecuencia</td>
+                    </tr>
+                    <tr>
+                        <td class="estiloDG" style="width:25%">Cantidad</td>
+                        <td style="width:25%">@item.consumoSustanciasVM.Cantidad</td>
+                        <td class="estiloDG" style="width:25%">Último consumo</td>
+                        <td style="width:25%">@item.consumoSustanciasVM.UltimoConsumo</td>
+                    </tr>
+                    <tr>
+                        <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
+                        <td colspan="3">@item.consumoSustanciasVM.Observaciones</td>
+                    </tr>
+
+                </table>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

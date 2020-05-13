@@ -17,5 +17,6 @@ namespace scorpioweb.Models
         public Domiciliosecundario domicilioSecundarioVM { get; set; }
         public Estados estadosVMDomicilioSec { get; set; }
         public Municipios municipiosVMDomicilioSec { get; set; }
+        public Consumosustancias consumoSustanciasVM { get; set; }
     }
 }

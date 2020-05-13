@@ -55,6 +55,7 @@ namespace scorpioweb.Controllers
             List<Estados> estados = _context.Estados.ToList();
             List<Municipios> municipios = _context.Municipios.ToList();
             List<Domiciliosecundario> domicilioSecundarioVM = _context.Domiciliosecundario.ToList();
+            List<Consumosustancias> consumoSustanciasVM = _context.Consumosustancias.ToList();
 
             ViewData["joinTables"] = from personaTable in personaVM
                                      join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
@@ -87,6 +88,14 @@ namespace scorpioweb.Controllers
                                          estadosVMDomicilioSec = domicilioSecEstado,
                                          municipiosVMDomicilioSec = domicilioSecMunicipio
                                      };
+
+            ViewData["joinTablesConsumoSustancias"] = from personaTable in personaVM
+                                           join sustancias in consumoSustanciasVM on persona.IdPersona equals sustancias.PersonaIdPersona
+                                           where personaTable.IdPersona == id
+                                           select new PersonaViewModel
+                                           {
+                                               consumoSustanciasVM = sustancias
+                                           };
 
             if (persona == null)
             {

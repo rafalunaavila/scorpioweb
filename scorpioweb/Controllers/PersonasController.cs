@@ -15,14 +15,16 @@ namespace scorpioweb.Controllers
 {
     public class PersonasController : Controller
     {
+
+        #region -Variables Globales-
         private readonly penas2Context _context;
         public static int contadorSustancia = 0;
         public static List<List<string>> datosSustancias =new List<List<string>>();
         public static List<List<string>> datosFamiliares = new List<List<string>>();
         public static List<List<string>> datosReferencias = new List<List<string>>();
         public static List<List<string>> datosFamiliaresExtranjero = new List<List<string>>();
-
-
+        #endregion
+        
         public PersonasController(penas2Context context)
         {
             _context = context;
@@ -34,6 +36,8 @@ namespace scorpioweb.Controllers
             return View(await _context.Persona.ToListAsync());
         }
 
+        #region -Detalles-
+
         // GET: Personas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,19 +48,59 @@ namespace scorpioweb.Controllers
 
             var persona = await _context.Persona
                 .SingleOrDefaultAsync(m => m.IdPersona == id);
+
+            List<Persona> personaVM = _context.Persona.ToList();
+            List<Domicilio> domicilioVM = _context.Domicilio.ToList();
+            List<Estudios> estudiosVM = _context.Estudios.ToList();
+            List<Estados> estados = _context.Estados.ToList();
+            List<Municipios> municipios = _context.Municipios.ToList();
+            List<Domiciliosecundario> domicilioSecundarioVM = _context.Domiciliosecundario.ToList();
+
+            ViewData["joinTables"] = from personaTable in personaVM
+                                     join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
+                                     join estudios in estudiosVM on persona.IdPersona equals estudios.PersonaIdPersona
+                                     join nacimientoEstado in estados on (Int32.Parse(persona.Lnestado)) equals nacimientoEstado.Id
+                                     join nacimientoMunicipio in municipios on (Int32.Parse(persona.Lnmunicipio)) equals nacimientoMunicipio.Id
+                                     join domicilioEstado in estados on (Int32.Parse(domicilio.Estado)) equals domicilioEstado.Id
+                                     join domicilioMunicipio in municipios on (Int32.Parse(domicilio.Municipio)) equals domicilioMunicipio.Id
+                                     join domicilioSec in domicilioSecundarioVM on domicilio.IdDomicilio equals domicilioSec.IdDomicilio
+                                     join domicilioSecEstado in estados on (Int32.Parse(domicilioSec.Estado)) equals domicilioSecEstado.Id
+                                     join domicilioSecMunicipio in municipios on (Int32.Parse(domicilioSec.Municipio)) equals domicilioSecMunicipio.Id
+                                     where personaTable.IdPersona == id
+                                    select new PersonaViewModel
+                                    {
+                                        personaVM = personaTable,
+                                        domicilioVM = domicilio,
+                                        estudiosVM = estudios,
+                                        estadosVMPersona=nacimientoEstado,
+                                        municipiosVMPersona=nacimientoMunicipio,
+                                        estadosVMDomicilio = domicilioEstado,
+                                        municipiosVMDomicilio= domicilioMunicipio,
+                                        domicilioSecundarioVM= domicilioSec,
+                                        estadosVMDomicilioSec= domicilioSecEstado,
+                                        municipiosVMDomicilioSec= domicilioSecMunicipio
+                                    };
+
+
+            //int idPersona = ((from table in _context.Persona
+            //                  select table).Count()) + 1;
             if (persona == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(ViewData["joinTables"]);
         }
+        #endregion
+
+
+        #region -Entrevista de encuadre insertar-
 
         public ActionResult guardarSustancia(string[] datosConsumo)
         {
-            for (int i=0; i < datosConsumo.Length-1;i++)
+            for (int i = 0; i < datosConsumo.Length - 1; i++)
             {
-                datosSustancias.Add(new List<String>{ datosConsumo[i], datosConsumo[5]});                
+                datosSustancias.Add(new List<String> { datosConsumo[i], datosConsumo[5] });
             }
 
             return Json(new { success = true, responseText = "Datos Guardados con éxito" });
@@ -72,14 +116,14 @@ namespace scorpioweb.Controllers
                     datosFamiliares.Add(new List<String> { datosFamiliar[i], datosFamiliar[13] });
                 }
             }
-            else if (tipoGuardado==2)
+            else if (tipoGuardado == 2)
             {
                 for (int i = 0; i < datosFamiliar.Length - 1; i++)
                 {
                     datosReferencias.Add(new List<String> { datosFamiliar[i], datosFamiliar[13] });
                 }
             }
-            
+
 
             return Json(new { success = true, responseText = "Datos Guardados con éxito" });
 
@@ -96,7 +140,8 @@ namespace scorpioweb.Controllers
 
         }
 
-        public JsonResult GetMunicipio(int EstadoId) {
+        public JsonResult GetMunicipio(int EstadoId)
+        {
             TempData["message"] = DateTime.Now;
 
 
@@ -122,10 +167,11 @@ namespace scorpioweb.Controllers
             return View();
         }
 
-        public string normaliza(string normalizar) {
+        public string normaliza(string normalizar)
+        {
             if (!String.IsNullOrEmpty(normalizar))
             {
-                normalizar=normalizar.ToUpper();
+                normalizar = normalizar.ToUpper();
             }
             return normalizar;
         }
@@ -141,7 +187,6 @@ namespace scorpioweb.Controllers
                 return DateTime.ParseExact("1900/01/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
             }
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar, Familiaresforaneos familiaresForaneos,
@@ -150,7 +195,7 @@ namespace scorpioweb.Controllers
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
             string propiedades, string CURP, string consumoSustancias,
             string tipoDomicilio, string calle, string no, string nombreCF, string paisD, string estadoD, string municipioD, string temporalidad,
-            string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string dbdomicilioSecundario,
+            string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string domicilioSecundario,
             string motivoDS,string tipoDomicilioDS, string calleDS, string noDS, string nombreCFDS, string paisDDS, string estadoDDS, string municipioDDS, string temporalidadDS,
             string residenciaHabitualDS, string cpDS, string referenciasDS, string horarioDS, string observacionesDS,
             string estudia, string gradoEstudios, string institucionE, string horarioE, string direccionE, string telefonoE, string observacionesE,
@@ -178,7 +223,7 @@ namespace scorpioweb.Controllers
                 persona.Lnestado = normaliza(lnEstado);
                 persona.Lnmunicipio = lnMunicipio;
                 persona.Lnlocalidad = lnLocalidad;
-                persona.EstadoCivil =
+                persona.EstadoCivil = estadoCivil;
                 persona.Duracion = duracion;
                 persona.OtroIdioma = normaliza(otroIdioma);
                 persona.EspecifiqueIdioma = normaliza(especifiqueIdioma);
@@ -208,7 +253,7 @@ namespace scorpioweb.Controllers
                 domicilio.ResidenciaHabitual = normaliza(residenciaHabitual);
                 domicilio.Cp = normaliza(cp);
                 domicilio.Referencias = normaliza(referencias);
-                domicilio.DomcilioSecundario = normaliza(dbdomicilioSecundario);
+                domicilio.DomcilioSecundario = domicilioSecundario;
                 domicilio.Horario = normaliza(horario);
                 domicilio.Observaciones = normaliza(observaciones);
                 #endregion
@@ -422,6 +467,8 @@ namespace scorpioweb.Controllers
             }
             return View(persona);
         }
+
+        #endregion
 
         // GET: Personas/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -22,5 +22,7 @@ namespace scorpioweb.Models
         public Actividadsocial actividadSocialVM { get; set; }
         public Abandonoestado abandonoEstadoVM { get; set; }
         public Saludfisica saludFisicaVM { get; set; }
+        public Familiaresforaneos familiaresForaneosVM { get; set; }
+        public Asientofamiliar asientoFamiliarVM { get; set; }
     }
 }

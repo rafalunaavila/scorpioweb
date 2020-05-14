@@ -62,6 +62,8 @@ namespace scorpioweb.Controllers
             List<Actividadsocial> actividadSocialVM = _context.Actividadsocial.ToList();
             List<Abandonoestado> abandonoEstadoVM = _context.Abandonoestado.ToList();
             List<Saludfisica> saludFisicaVM = _context.Saludfisica.ToList();
+            List<Familiaresforaneos> familiaresForaneosVM = _context.Familiaresforaneos.ToList();
+            List<Asientofamiliar> asientoFamiliarVM = _context.Asientofamiliar.ToList();
 
             #endregion
 
@@ -116,6 +118,35 @@ namespace scorpioweb.Controllers
                                            {
                                                consumoSustanciasVM = sustancias
                                            };
+
+            ViewData["joinTablesFamiliaresForaneos"] = from personaTable in personaVM
+                                                      join familiarForaneo in familiaresForaneosVM on persona.IdPersona equals familiarForaneo.PersonaIdPersona
+                                                      where personaTable.IdPersona == id
+                                                      select new PersonaViewModel
+                                                      {
+                                                          familiaresForaneosVM = familiarForaneo
+                                                      };
+
+            ViewData["joinTablesFamiliares"] = from personaTable in personaVM
+                                                       join familiar in asientoFamiliarVM on persona.IdPersona equals familiar.PersonaIdPersona
+                                                       where personaTable.IdPersona == id && familiar.Tipo=="FAMILIAR"
+                                                       select new PersonaViewModel
+                                                       {
+                                                           asientoFamiliarVM = familiar
+                                                       };
+
+            ViewData["joinTablesReferencia"] = from personaTable in personaVM
+                                               join referencia in asientoFamiliarVM on persona.IdPersona equals referencia.PersonaIdPersona
+                                               where personaTable.IdPersona == id && referencia.Tipo == "REFERENCIA"
+                                               select new PersonaViewModel
+                                               {
+                                                   asientoFamiliarVM = referencia
+                                               };
+
+
+            ViewBag.Referencia = ((ViewData["joinTablesReferencia"] as IEnumerable<scorpioweb.Models.PersonaViewModel>).Count()).ToString();
+
+            ViewBag.Familiar = ((ViewData["joinTablesFamiliares"] as IEnumerable<scorpioweb.Models.PersonaViewModel>).Count()).ToString();
             #endregion
 
 

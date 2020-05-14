@@ -91,6 +91,26 @@
                                     </td>
                                 }
                             </tr>
+                            <tr>
+                                <td class="estiloDG" colspan="1" style="width:25%">Familiares</td>
+                                <td colspan="2">@ViewBag.Familiar</td>
+                                @if (ViewBag.Familiar != "0")
+                                {
+                                    <td colspan="1">
+                                        <a data-toggle="modal" data-target="#modalFamiliares">Ver familiares</a>
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td class="estiloDG" colspan="1" style="width:25%">Referencias</td>
+                                <td colspan="2">@ViewBag.Referencia</td>
+                                @if (ViewBag.Referencia != "0")
+                                {
+                                    <td colspan="1">
+                                        <a data-toggle="modal" data-target="#modalReferencias">Ver referencias</a>
+                                    </td>
+                                }
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -366,6 +386,205 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<!-- Modal Consumo de sustancias -->
+<div class="modal fade" id="modalConsumoSustancias" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0078A7;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Consumo de sustancias</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in ViewData["joinTablesConsumoSustancias"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                {
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Sustancia</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.Sustancia</td>
+                            <td class="estiloDG" style="width:25%">Frecuencia de consumo</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.Frecuencia</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Cantidad</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.Cantidad</td>
+                            <td class="estiloDG" style="width:25%">Último consumo</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.UltimoConsumo</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
+                            <td colspan="3">@item.consumoSustanciasVM.Observaciones</td>
+                        </tr>
+
+                    </table>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Familiares -->
+<div class="modal fade" id="modalFamiliares" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0078A7;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Familiares</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in ViewData["joinTablesFamiliares"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                {
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Nombre</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Nombre</td>
+                            <td class="estiloDG" style="width:25%">Relación</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Relacion</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Edad</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Edad</td>
+                            <td class="estiloDG" style="width:25%">Sexo</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Sexo</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Dependencia</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Dependencia</td>
+                            <td class="estiloDG" style="width:25%">Explica dependecia</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.DependenciaExplica</td>
+                        </tr>
+                        <tr>
+                            @if (@item.asientoFamiliarVM.VivenJuntos == "NO")
+                            {
+                                <td class="estiloDG" style="width:25%">Viven juntos</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.VivenJuntos</td>
+                                <td class="estiloDG" style="width:25%">Dirección</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.Domicilio</td>
+                            }
+                            else
+                            {
+                                <td class="estiloDG" colspan="1" style="width:25%">Viven juntos</td>
+                                <td colspan="3">@item.asientoFamiliarVM.VivenJuntos</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Teléfono</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Telefono</td>
+                            <td class="estiloDG" style="width:25%">Horario de localización</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.HorarioLocalizacion</td>
+                        </tr>
+                        <tr>
+                            @if (@item.asientoFamiliarVM.EnteradoProceso == "NO")
+                            {
+                                <td class="estiloDG" style="width:25%">Enterado de su proceso</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.EnteradoProceso</td>
+                                <td class="estiloDG" style="width:25%">Puede enterarse</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.PuedeEnterarse</td>
+                            }
+                            else
+                            {
+                                <td class="estiloDG" colspan="1" style="width:25%">Enterado de su proceso</td>
+                                <td colspan="3">@item.asientoFamiliarVM.EnteradoProceso</td>
+                            }
+
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
+                            <td colspan="3">@item.asientoFamiliarVM.Observaciones</td>
+                        </tr>
+
+                    </table>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Referencias -->
+<div class="modal fade" id="modalReferencias" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#0078A7;">
+                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Referencias</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in ViewData["joinTablesReferencia"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                {
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Nombre</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Nombre</td>
+                            <td class="estiloDG" style="width:25%">Relación</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Relacion</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Edad</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Edad</td>
+                            <td class="estiloDG" style="width:25%">Sexo</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Sexo</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Dependencia</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Dependencia</td>
+                            <td class="estiloDG" style="width:25%">Explica dependecia</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.DependenciaExplica</td>
+                        </tr>
+                        <tr>
+                            @if (@item.asientoFamiliarVM.VivenJuntos == "NO")
+                            {
+                                <td class="estiloDG" style="width:25%">Viven juntos</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.VivenJuntos</td>
+                                <td class="estiloDG" style="width:25%">Dirección</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.Domicilio</td>
+                            }
+                            else
+                            {
+                                <td class="estiloDG" colspan="1" style="width:25%">Viven juntos</td>
+                                <td colspan="3">@item.asientoFamiliarVM.VivenJuntos</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Teléfono</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.Telefono</td>
+                            <td class="estiloDG" style="width:25%">Horario de localización</td>
+                            <td style="width:25%">@item.asientoFamiliarVM.HorarioLocalizacion</td>
+                        </tr>
+                        <tr>
+                            @if (@item.asientoFamiliarVM.EnteradoProceso == "NO")
+                            {
+                                <td class="estiloDG" style="width:25%">Enterado de su proceso</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.EnteradoProceso</td>
+                                <td class="estiloDG" style="width:25%">Puede enterarse</td>
+                                <td style="width:25%">@item.asientoFamiliarVM.PuedeEnterarse</td>
+                            }
+                            else
+                            {
+                                <td class="estiloDG" colspan="1" style="width:25%">Enterado de su proceso</td>
+                                <td colspan="3">@item.asientoFamiliarVM.EnteradoProceso</td>
+                            }
+
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
+                            <td colspan="3">@item.asientoFamiliarVM.Observaciones</td>
+                        </tr>
+
+                    </table>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Domicilio Secundario -->
 <div class="modal fade" id="modalDomicilioSecundario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -419,45 +638,6 @@
     </div>
 </div>
 
-<!-- Modal Domicilio Secundario -->
-<div class="modal fade" id="modalConsumoSustancias" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#415667;">
-                <h5 class="modal-title" style="font-size: 30px; color:#fff;">Consumo de sustancias</h5>
-            </div>
-            <div class="modal-body">
-                @foreach (var item in ViewData["joinTablesConsumoSustancias"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
-                {
-                    <table class="table table-bordered">
-                        <tr>
-                            <td class="estiloDG" style="width:25%">Sustancia</td>
-                            <td style="width:25%">@item.consumoSustanciasVM.Sustancia</td>
-                            <td class="estiloDG" style="width:25%">Frecuencia de consumo</td>
-                            <td style="width:25%">@item.consumoSustanciasVM.Frecuencia</td>
-                        </tr>
-                        <tr>
-                            <td class="estiloDG" style="width:25%">Cantidad</td>
-                            <td style="width:25%">@item.consumoSustanciasVM.Cantidad</td>
-                            <td class="estiloDG" style="width:25%">Último consumo</td>
-                            <td style="width:25%">@item.consumoSustanciasVM.UltimoConsumo</td>
-                        </tr>
-                        <tr>
-                            <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
-                            <td colspan="3">@item.consumoSustanciasVM.Observaciones</td>
-                        </tr>
-
-                    </table>
-                }
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Modal Familiares Extranjero -->
 <div class="modal fade" id="modalFamiliaresForaneos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -466,10 +646,47 @@
                 <h5 class="modal-title" style="font-size: 30px; color:#000;">Familiar en el extranjero</h5>
             </div>
             <div class="modal-body">
-                @foreach (var item in ViewData["joinTablesConsumoSustancias"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                @foreach (var item in ViewData["joinTablesFamiliaresForaneos"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
                 {
                     <table class="table table-bordered">
-                        
+                        <tr>
+                            <td class="estiloAbandonoEstado">Nombre</td>
+                            <td>@item.familiaresForaneosVM.Nombre</td>
+                            <td class="estiloAbandonoEstado">Edad</td>
+                            <td>@item.familiaresForaneosVM.Edad</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloAbandonoEstado">Sexo</td>
+                            <td>@item.familiaresForaneosVM.Sexo</td>
+                            <td class="estiloAbandonoEstado">Relación</td>
+                            <td>@item.familiaresForaneosVM.Relacion</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloAbandonoEstado">Tiempo de conocerlo</td>
+                            <td>@item.familiaresForaneosVM.TiempoConocerlo</td>
+                            <td class="estiloAbandonoEstado">País</td>
+                            <td>@item.familiaresForaneosVM.Pais</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloAbandonoEstado">Estado</td>
+                            <td>@item.familiaresForaneosVM.Estado</td>
+                            <td class="estiloAbandonoEstado">Teléfono</td>
+                            <td>@item.familiaresForaneosVM.Telefono</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloAbandonoEstado" colspan="1" style="width:25%">Frecuencia de contacto</td>
+                            <td colspan="3">@item.familiaresForaneosVM.FrecuenciaContacto</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloAbandonoEstado">Enterado de su proceso</td>
+                            <td>@item.familiaresForaneosVM.EnteradoProceso</td>
+                            <td class="estiloAbandonoEstado">Se puede enterar</td>
+                            <td>@item.familiaresForaneosVM.PuedeEnterarse</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloAbandonoEstado" colspan="1" style="width:25%">Observaciones</td>
+                            <td colspan="3">@item.familiaresForaneosVM.Observaciones</td>
+                        </tr>
                     </table>
                 }
 
@@ -480,3 +697,4 @@
         </div>
     </div>
 </div>
+

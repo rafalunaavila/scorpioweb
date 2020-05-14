@@ -18,5 +18,9 @@ namespace scorpioweb.Models
         public Estados estadosVMDomicilioSec { get; set; }
         public Municipios municipiosVMDomicilioSec { get; set; }
         public Consumosustancias consumoSustanciasVM { get; set; }
+        public Trabajo trabajoVM { get; set; }
+        public Actividadsocial actividadSocialVM { get; set; }
+        public Abandonoestado abandonoEstadoVM { get; set; }
+        public Saludfisica saludFisicaVM { get; set; }
     }
 }

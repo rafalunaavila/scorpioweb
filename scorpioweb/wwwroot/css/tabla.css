@@ -10,3 +10,20 @@
     background-color: #848F95;
     color: #fff
 }
+.estiloTrabajo {
+    background-color: #80AEAB;
+    color: #fff
+}
+.estiloActividad {
+    background-color: #233460;
+    color: #fff
+}
+.estiloAbandonoEstado {
+    background-color: #E2E2E2;
+    border-color: #fff;
+    color: #000;
+}
+.estilosSalud {
+    background-color: #3D7F99;
+    color: #fff
+}

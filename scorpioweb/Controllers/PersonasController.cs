@@ -49,6 +49,8 @@ namespace scorpioweb.Controllers
             var persona = await _context.Persona
                 .SingleOrDefaultAsync(m => m.IdPersona == id);
 
+            #region -To List databases-
+
             List<Persona> personaVM = _context.Persona.ToList();
             List<Domicilio> domicilioVM = _context.Domicilio.ToList();
             List<Estudios> estudiosVM = _context.Estudios.ToList();
@@ -56,10 +58,21 @@ namespace scorpioweb.Controllers
             List<Municipios> municipios = _context.Municipios.ToList();
             List<Domiciliosecundario> domicilioSecundarioVM = _context.Domiciliosecundario.ToList();
             List<Consumosustancias> consumoSustanciasVM = _context.Consumosustancias.ToList();
+            List<Trabajo> trabajoVM = _context.Trabajo.ToList();
+            List<Actividadsocial> actividadSocialVM = _context.Actividadsocial.ToList();
+            List<Abandonoestado> abandonoEstadoVM = _context.Abandonoestado.ToList();
+            List<Saludfisica> saludFisicaVM = _context.Saludfisica.ToList();
 
+            #endregion
+
+            #region -Jointables-
             ViewData["joinTables"] = from personaTable in personaVM
                                      join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
                                      join estudios in estudiosVM on persona.IdPersona equals estudios.PersonaIdPersona
+                                     join trabajo in trabajoVM on persona.IdPersona equals trabajo.PersonaIdPersona
+                                     join actividaSocial in actividadSocialVM on persona.IdPersona equals actividaSocial.PersonaIdPersona
+                                     join abandonoEstado in abandonoEstadoVM on persona.IdPersona equals abandonoEstado.PersonaIdPersona
+                                     join saludFisica in saludFisicaVM on persona.IdPersona equals saludFisica.PersonaIdPersona
                                      join nacimientoEstado in estados on (Int32.Parse(persona.Lnestado)) equals nacimientoEstado.Id
                                      join nacimientoMunicipio in municipios on (Int32.Parse(persona.Lnmunicipio)) equals nacimientoMunicipio.Id
                                      join domicilioEstado in estados on (Int32.Parse(domicilio.Estado)) equals domicilioEstado.Id
@@ -70,12 +83,19 @@ namespace scorpioweb.Controllers
                                         personaVM = personaTable,
                                         domicilioVM = domicilio,
                                         estudiosVM = estudios,
+                                        trabajoVM = trabajo,
+                                        actividadSocialVM=actividaSocial,
+                                        abandonoEstadoVM=abandonoEstado,
+                                        saludFisicaVM=saludFisica,
                                         estadosVMPersona=nacimientoEstado,
                                         municipiosVMPersona=nacimientoMunicipio,
                                         estadosVMDomicilio = domicilioEstado,
                                         municipiosVMDomicilio= domicilioMunicipio,
                                     };
 
+            #endregion
+
+            #region -JoinTables null-
             ViewData["joinTablesDomSec"] = from personaTable in personaVM
                                      join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
                                            join domicilioSec in domicilioSecundarioVM.DefaultIfEmpty() on domicilio.IdDomicilio equals domicilioSec.IdDomicilio
@@ -96,6 +116,8 @@ namespace scorpioweb.Controllers
                                            {
                                                consumoSustanciasVM = sustancias
                                            };
+            #endregion
+
 
             if (persona == null)
             {

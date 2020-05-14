@@ -176,6 +176,188 @@
                         </table>
                     </div>
                 </div>
+                <div id="datosTrabajo" class="panel panel panel-primary" style="border-color:#fff;">
+                    <div class="panel-heading" style="color:#fff; background-color:#80AEAB; border-color:#80AEAB;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse4" onclick="mostrar">Trabajo</a>
+                        </h4>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse" style="padding-top:1%;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="estiloTrabajo">Trabaja actualmente</td>
+                                <td>@item.trabajoVM.Trabaja</td>
+                                <td class="estiloTrabajo">Tipo de ocupación</td>
+                                <td>@item.trabajoVM.TipoOcupacion</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo">Puesto</td>
+                                <td>@item.trabajoVM.Puesto</td>
+                                <td class="estiloTrabajo">Empleador/Jefe inmediato</td>
+                                <td>@item.trabajoVM.EmpledorJefe</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo">Enterado de proceso</td>
+                                <td>@item.trabajoVM.EnteradoProceso</td>
+                                <td class="estiloTrabajo">Se puede enterar</td>
+                                <td>@item.trabajoVM.SePuedeEnterar</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo" colspan="1" style="width:25%">Tiempo trabajando</td>
+                                <td colspan="3">@item.trabajoVM.TiempoTrabajano</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo">Salario</td>
+                                <td>$@item.trabajoVM.Salario</td>
+                                <td class="estiloTrabajo">Temporalidad de pago</td>
+                                <td>@item.trabajoVM.TemporalidadSalario</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo" colspan="1" style="width:25%">Dirección del trabajo</td>
+                                <td colspan="3">@item.trabajoVM.Direccion</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo">Horario</td>
+                                <td>@item.trabajoVM.Horario</td>
+                                <td class="estiloTrabajo">Teléfono</td>
+                                <td>@item.trabajoVM.Telefono</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloTrabajo" colspan="1" style="width:25%">Observaciones</td>
+                                <td colspan="3">@item.trabajoVM.Observaciones</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="datosSociales" class="panel panel panel-primary" style="border-color:#fff;">
+                    <div class="panel-heading" style="color:#fff; background-color:#233460; border-color:#233460;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse5" onclick="mostrar">Actividades Sociales</a>
+                        </h4>
+                    </div>
+                    <div id="collapse5" class="panel-collapse collapse" style="padding-top:1%;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="estiloActividad">Tipo de actividad</td>
+                                <td>@item.actividadSocialVM.TipoActividad</td>
+                                <td class="estiloActividad">Horario</td>
+                                <td>@item.actividadSocialVM.Horario</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloActividad">Lugar</td>
+                                <td>@item.actividadSocialVM.Lugar</td>
+                                <td class="estiloActividad">Teléfono</td>
+                                <td>@item.actividadSocialVM.Telefono</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloActividad">Alguien se puede enterar de su proceso</td>
+                                <td>@item.actividadSocialVM.SePuedeEnterar</td>
+                                <td class="estiloActividad">Referencia</td>
+                                <td>@item.actividadSocialVM.Referencia</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloActividad" colspan="1" style="width:25%">Observaciones</td>
+                                <td colspan="3">@item.actividadSocialVM.Observaciones</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="datosAbandonoEstado" class="panel panel panel-primary" style="border-color:#000;">
+                    <div class="panel-heading" style="color:#000; background-color:#fff; border-color:#fff;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse6" onclick="mostrar">Abandono Estado</a>
+                        </h4>
+                    </div>
+                    <div id="collapse6" class="panel-collapse collapse" style="padding-top:1%;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="estiloAbandonoEstado">Ha vivido en otro estado o país</td>
+                                <td>@item.abandonoEstadoVM.VividoFuera</td>
+                                <td class="estiloAbandonoEstado">Lugares</td>
+                                <td>@item.abandonoEstadoVM.LugaresVivido</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloAbandonoEstado">Cada cuanto tiempo viaja</td>
+                                <td>@item.abandonoEstadoVM.TiempoVivido</td>
+                                <td class="estiloAbandonoEstado">Motivo</td>
+                                <td>@item.abandonoEstadoVM.MotivoVivido</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloAbandonoEstado">Viaja habitualmente</td>
+                                <td>@item.abandonoEstadoVM.ViajaHabitual</td>
+                                <td class="estiloAbandonoEstado">Lugares</td>
+                                <td>@item.abandonoEstadoVM.LugaresViaje</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloAbandonoEstado">Tiempo</td>
+                                <td>@item.abandonoEstadoVM.TiempoViaje</td>
+                                <td class="estiloAbandonoEstado">Motivo</td>
+                                <td>@item.abandonoEstadoVM.MotivoViaje</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloAbandonoEstado">Cuenta con documentacipon</td>
+                                <td>@item.abandonoEstadoVM.DocumentacionSalirPais</td>
+                                <td class="estiloAbandonoEstado">Pasaporte</td>
+                                <td>@item.abandonoEstadoVM.Pasaporte</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloAbandonoEstado" colspan="1" style="width:25%">VISA</td>
+                                <td colspan="3">@item.abandonoEstadoVM.Visa</td>
+                            </tr>
+                            <tr>
+                                <td class="estiloAbandonoEstado" colspan="2" style="width:25%">Tiene familiares en otro estado o país con los que tenga comunicación estrecha</td>
+                                <td colspan="1">@item.abandonoEstadoVM.FamiliaresFuera</td>
+                                @if (@item.abandonoEstadoVM.FamiliaresFuera == "SI")
+                                {
+                                    <td colspan="1">
+                                        <a data-toggle="modal" data-target="#modalFamiliaresForaneos">Ver Familiares</a>
+                                    </td>
+                                }
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="datosSalud" class="panel panel panel-primary" style="border-color:#fff;">
+                    <div class="panel-heading" style="color:#fff; background-color:#3D7F99; border-color:#3D7F99;">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse7" onclick="mostrar">Salud</a>
+                        </h4>
+                    </div>
+                    <div id="collapse7" class="panel-collapse collapse" style="padding-top:1%;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="estilosSalud" colspan="1" style="width:25%">Enfermedades</td>
+                                <td colspan="3">@item.saludFisicaVM.Enfermedad</td>
+                            </tr>
+                            <tr>
+                                <td class="estilosSalud">Especifique enfermedad</td>
+                                <td>@item.saludFisicaVM.EspecifiqueEnfermedad</td>
+                                <td class="estilosSalud">Tratamiento médico</td>
+                                <td>@item.saludFisicaVM.Tratamiento</td>
+                            </tr>
+                            <tr>
+                                <td class="estilosSalud">Discapacidad</td>
+                                <td>@item.saludFisicaVM.Discapacidad</td>
+                                <td class="estilosSalud">Especifique discapacidad</td>
+                                <td>@item.saludFisicaVM.EspecifiqueDiscapacidad</td>
+                            </tr>
+                            <tr>
+                                <td class="estilosSalud" colspan="1" style="width:25%">Servicio médico</td>
+                                <td colspan="3">@item.saludFisicaVM.ServicioMedico</td>
+                            </tr>
+                            <tr>
+                                <td class="estilosSalud">Tipo de servicio</td>
+                                <td>@item.saludFisicaVM.EspecifiqueServicioMedico</td>
+                                <td class="estilosSalud">Institución prestadora de servicio</td>
+                                <td>@item.saludFisicaVM.InstitucionServicioMedico</td>
+                            </tr>
+                            <tr>
+                                <td class="estilosSalud" colspan="1" style="width:25%">Observaciones</td>
+                                <td colspan="3">@item.saludFisicaVM.Observaciones</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -247,25 +429,48 @@
             <div class="modal-body">
                 @foreach (var item in ViewData["joinTablesConsumoSustancias"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
                 {
-                <table class="table table-bordered">
-                    <tr>
-                        <td class="estiloDG" style="width:25%">Sustancia</td>
-                        <td style="width:25%">@item.consumoSustanciasVM.Sustancia</td>
-                        <td class="estiloDG" style="width:25%">Frecuencia de consumo</td>
-                        <td style="width:25%">@item.consumoSustanciasVM.Frecuencia</td>
-                    </tr>
-                    <tr>
-                        <td class="estiloDG" style="width:25%">Cantidad</td>
-                        <td style="width:25%">@item.consumoSustanciasVM.Cantidad</td>
-                        <td class="estiloDG" style="width:25%">Último consumo</td>
-                        <td style="width:25%">@item.consumoSustanciasVM.UltimoConsumo</td>
-                    </tr>
-                    <tr>
-                        <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
-                        <td colspan="3">@item.consumoSustanciasVM.Observaciones</td>
-                    </tr>
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Sustancia</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.Sustancia</td>
+                            <td class="estiloDG" style="width:25%">Frecuencia de consumo</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.Frecuencia</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" style="width:25%">Cantidad</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.Cantidad</td>
+                            <td class="estiloDG" style="width:25%">Último consumo</td>
+                            <td style="width:25%">@item.consumoSustanciasVM.UltimoConsumo</td>
+                        </tr>
+                        <tr>
+                            <td class="estiloDG" colspan="1" style="width:25%">Observaciones</td>
+                            <td colspan="3">@item.consumoSustanciasVM.Observaciones</td>
+                        </tr>
 
-                </table>
+                    </table>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Familiares Extranjero -->
+<div class="modal fade" id="modalFamiliaresForaneos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="color:#000; background-color:#fff; border-color:#fff;">
+                <h5 class="modal-title" style="font-size: 30px; color:#000;">Familiar en el extranjero</h5>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in ViewData["joinTablesConsumoSustancias"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
+                {
+                    <table class="table table-bordered">
+                        
+                    </table>
                 }
 
             </div>

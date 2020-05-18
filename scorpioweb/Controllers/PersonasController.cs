@@ -10,6 +10,8 @@ using scorpioweb.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Globalization;
+using Rotativa;
+using Rotativa.AspNetCore;
 
 namespace scorpioweb.Controllers
 {
@@ -534,6 +536,22 @@ namespace scorpioweb.Controllers
             return View(persona);
         }
 
+        #endregion
+
+        #region -Reportes-
+        public ActionResult ReportePersona()
+        {
+            return View();
+        }
+
+        public ActionResult Imprimir(int id)
+        {
+            var PDFResult = new ViewAsPdf("Details",new { id=id })
+            {
+                FileName = "Reporte.PDF"
+            };
+            return PDFResult;
+        }
         #endregion
 
         // GET: Personas/Edit/5

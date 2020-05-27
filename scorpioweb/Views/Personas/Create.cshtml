@@ -351,7 +351,7 @@
             var cantidad = document.getElementById("cantidadS").value;
             var ultimoC = document.getElementById("ultimoConsumo").value;
             var observaciones = document.getElementById("observacionesConsumo").value;
-            var user = document.getElementById("usuario").firstChild.nodeValue;
+            //var user = document.getElementById("usuario").firstChild.nodeValue;
 
             $.ajax({
                 type: "POST",
@@ -359,7 +359,7 @@
                 url: "/Personas/guardarSustancia",
                 traditional: true,
                 data: {
-                    datosConsumo: [sustancia, frecuencia, cantidad, ultimoC, observaciones, user],
+                    datosConsumo: [sustancia, frecuencia, cantidad, ultimoC, observaciones/*, user*/],
                 },
                 success: function (response) {
                     if (response.success) {
@@ -409,10 +409,7 @@
             var enteradoProceso = p.options[p.selectedIndex].value;/////////////////
             var puedeEnterarse = e.options[e.selectedIndex].value;/////////////////
             var observaciones = document.getElementById("AFobservacionesConsumo").value;
-            var user = document.getElementById("usuario").firstChild.nodeValue;
-
-
-
+            //var user = document.getElementById("usuario").firstChild.nodeValue;
 
             $.ajax({
                 type: "POST",
@@ -420,7 +417,7 @@
                 url: "/Personas/guardarFamiliar",
                 traditional: true,
                 data: {
-                    datosFamiliar: [nombre, relacion, edad, sexo, dependencia, explicaDependencia, vivenJuntos, direccion, telefono, horarioLocalizacion, enteradoProceso, puedeEnterarse, observaciones, user],
+                    datosFamiliar: [nombre, relacion, edad, sexo, dependencia, explicaDependencia, vivenJuntos, direccion, telefono, horarioLocalizacion, enteradoProceso, puedeEnterarse, observaciones/*, user*/],
                     tipoGuardado: tipo,
                 },
                 success: function (response) {
@@ -482,9 +479,8 @@
             var frecuencia = f.options[f.selectedIndex].value;/////////////////
             var enteradoProceso = p.options[p.selectedIndex].value;/////////////////
             var puedeEnterarse = e.options[e.selectedIndex].value;/////////////////
-            var observaciones = document.getElementById("FEobservaciones").value;            
-            
-            var user = document.getElementById("usuario").firstChild.nodeValue;
+            var observaciones = document.getElementById("FEobservaciones").value;       
+            //var user = document.getElementById("usuario").firstChild.nodeValue;
 
             $.ajax({
                 type: "POST",
@@ -492,7 +488,7 @@
                 url: "/Personas/guardarFamiliarExtranjero",
                 traditional: true,
                 data: {
-                    datosFE: [nombre, relacion, edad, sexo, tiempo, pais, estado, telefono, frecuencia, enteradoProceso, puedeEnterarse, observaciones, user],
+                    datosFE: [nombre, relacion, edad, sexo, tiempo, pais, estado, telefono, frecuencia, enteradoProceso, puedeEnterarse, observaciones/*, user*/],
                 },
                 success: function (response) {
                     if (response.success) {
@@ -538,8 +534,7 @@
 
 @ViewBag.Javascript
 <h2>Entrevista de encuadre</h2>
-<h2 id="usuario">iovanni</h2>
-
+@*<h2 id="usuario">iovanni</h2>*@
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -609,6 +604,7 @@
                                 <select class="form-control" name="lnMunicipio" id="lnMunicipio"
                                         asp-items="@(new SelectList(string.Empty,"Id","Municipio"))">
                                 </select>
+
                             </div>
                             <div class="form-group col-md-3" id="Localidad">
                                 <label class="control-label">Localidad</label>
@@ -1266,6 +1262,9 @@
                 <input type="submit" value="Guardar Registro" class="btn btn-default" />
             </div>
         </form>
+        <a href='@Url.Action("borrarConsumo", "Personas")'>
+            <input class="btn-danger" type="button" value="Click Me">
+        </a>
     </div>
 
 

@@ -12,11 +12,18 @@ using Newtonsoft.Json;
 using System.Globalization;
 using Rotativa;
 using Rotativa.AspNetCore;
+using Syncfusion.HtmlConverter;
+using Syncfusion.Pdf;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace scorpioweb.Controllers
 {
     public class PersonasController : Controller
     {
+        //To get content root path of the project
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         #region -Variables Globales-
         private readonly penas2Context _context;
@@ -27,9 +34,26 @@ namespace scorpioweb.Controllers
         public static List<List<string>> datosFamiliaresExtranjero = new List<List<string>>();
         #endregion
         
-        public PersonasController(penas2Context context)
+        public PersonasController(penas2Context context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
+        }
+
+        public IActionResult ExportToPDF()
+        {
+            //Initialize HTML to PDF converter 
+            HtmlToPdfConverter htmlConverter = new HtmlToPdfConverter();
+            WebKitConverterSettings settings = new WebKitConverterSettings();
+            //Set WebKit path
+            settings.WebKitPath = Path.Combine(_hostingEnvironment.ContentRootPath, "QtBinariesWindows");
+            //Assign WebKit settings to HTML converter
+            htmlConverter.ConverterSettings = settings;
+            //Convert URL to PDF
+            PdfDocument document = htmlConverter.Convert("https://localhost:44359/Firmas/GeneraQR");
+            MemoryStream stream = new MemoryStream();
+            document.Save(stream);
+            return File(stream.ToArray(), System.Net.Mime.MediaTypeNames.Application.Pdf, "Output.pdf");
         }
 
         // GET: Personas
@@ -77,10 +101,10 @@ namespace scorpioweb.Controllers
                                      join actividaSocial in actividadSocialVM on persona.IdPersona equals actividaSocial.PersonaIdPersona
                                      join abandonoEstado in abandonoEstadoVM on persona.IdPersona equals abandonoEstado.PersonaIdPersona
                                      join saludFisica in saludFisicaVM on persona.IdPersona equals saludFisica.PersonaIdPersona
-                                     join nacimientoEstado in estados on (Int32.Parse(persona.Lnestado)) equals nacimientoEstado.Id
-                                     join nacimientoMunicipio in municipios on (Int32.Parse(persona.Lnmunicipio)) equals nacimientoMunicipio.Id
-                                     join domicilioEstado in estados on (Int32.Parse(domicilio.Estado)) equals domicilioEstado.Id
-                                     join domicilioMunicipio in municipios on (Int32.Parse(domicilio.Municipio)) equals domicilioMunicipio.Id
+                                     //join nacimientoEstado in estados on (Int32.Parse(persona.Lnestado)) equals nacimientoEstado.Id
+                                     //join nacimientoMunicipio in municipios on (Int32.Parse(persona.Lnmunicipio)) equals nacimientoMunicipio.Id
+                                     //join domicilioEstado in estados on (Int32.Parse(domicilio.Estado)) equals domicilioEstado.Id
+                                     //join domicilioMunicipio in municipios on (Int32.Parse(domicilio.Municipio)) equals domicilioMunicipio.Id
                                      where personaTable.IdPersona == id
                                     select new PersonaViewModel
                                     {
@@ -90,11 +114,11 @@ namespace scorpioweb.Controllers
                                         trabajoVM = trabajo,
                                         actividadSocialVM=actividaSocial,
                                         abandonoEstadoVM=abandonoEstado,
-                                        saludFisicaVM=saludFisica,
-                                        estadosVMPersona=nacimientoEstado,
-                                        municipiosVMPersona=nacimientoMunicipio,
-                                        estadosVMDomicilio = domicilioEstado,
-                                        municipiosVMDomicilio= domicilioMunicipio,
+                                        saludFisicaVM=saludFisica
+                                        //estadosVMPersona=nacimientoEstado,
+                                        //municipiosVMPersona=nacimientoMunicipio,
+                                        //estadosVMDomicilio = domicilioEstado,
+                                        //municipiosVMDomicilio= domicilioMunicipio,
                                     };
 
             #endregion
@@ -166,9 +190,10 @@ namespace scorpioweb.Controllers
 
         public ActionResult guardarSustancia(string[] datosConsumo)
         {
-            for (int i = 0; i < datosConsumo.Length - 1; i++)
+            string currentUser = User.Identity.Name;
+            for (int i = 0; i < datosConsumo.Length; i++)
             {
-                datosSustancias.Add(new List<String> { datosConsumo[i], datosConsumo[5] });
+                datosSustancias.Add(new List<String> { datosConsumo[i], currentUser });
             }
 
             return Json(new { success = true, responseText = "Datos Guardados con éxito" });
@@ -177,18 +202,19 @@ namespace scorpioweb.Controllers
 
         public ActionResult guardarFamiliar(string[] datosFamiliar, int tipoGuardado)
         {
+            string currentUser = User.Identity.Name;
             if (tipoGuardado == 1)
             {
-                for (int i = 0; i < datosFamiliar.Length - 1; i++)
+                for (int i = 0; i < datosFamiliar.Length; i++)
                 {
-                    datosFamiliares.Add(new List<String> { datosFamiliar[i], datosFamiliar[13] });
+                    datosFamiliares.Add(new List<String> { datosFamiliar[i], currentUser });
                 }
             }
             else if (tipoGuardado == 2)
             {
-                for (int i = 0; i < datosFamiliar.Length - 1; i++)
+                for (int i = 0; i < datosFamiliar.Length; i++)
                 {
-                    datosReferencias.Add(new List<String> { datosFamiliar[i], datosFamiliar[13] });
+                    datosReferencias.Add(new List<String> { datosFamiliar[i], currentUser });
                 }
             }
 
@@ -199,9 +225,10 @@ namespace scorpioweb.Controllers
 
         public ActionResult guardarFamiliarExtranjero(string[] datosFE)
         {
-            for (int i = 0; i < datosFE.Length - 1; i++)
+            string currentUser = User.Identity.Name;
+            for (int i = 0; i < datosFE.Length; i++)
             {
-                datosFamiliaresExtranjero.Add(new List<String> { datosFE[i], datosFE[12] });
+                datosFamiliaresExtranjero.Add(new List<String> { datosFE[i], currentUser });
             }
 
             return Json(new { success = true, responseText = "Datos Guardados con éxito" });
@@ -223,9 +250,10 @@ namespace scorpioweb.Controllers
         }
 
         // GET: Personas/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create(Estados Estados)
         {
-            //datosSustancias.Clear();
+            //datosSustancias.Clear();            
             List<Estados> listaEstados = new List<Estados>();
             listaEstados = (from table in _context.Estados
                             select table).ToList();
@@ -255,6 +283,22 @@ namespace scorpioweb.Controllers
                 return DateTime.ParseExact("1900/01/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
             }
         }
+
+        public ActionResult borrarConsumo()
+        {
+            string currentUser = User.Identity.Name;
+            for (int i = 0; i < datosSustancias.Count; i++)
+            {
+                if (datosSustancias[i][1] == currentUser)
+                {
+                    datosSustancias.RemoveAt(i);
+                    i--;
+                }
+            }
+            return Json(new { success = true, responseText = "Datos Guardados con éxito" });
+        }
+
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar, Familiaresforaneos familiaresForaneos,
@@ -275,6 +319,7 @@ namespace scorpioweb.Controllers
             string enfermedad, string especifiqueEnfermedad, string embarazoLactancia, string tiempoEmbarazo, string tratamiento, string discapacidad, string especifiqueDiscapacidad,
             string servicioMedico, string especifiqueServicioMedico, string institucionServicioMedico, string observacionesSalud)//[Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización")]
         {
+            string currentUser = User.Identity.Name;
 
 
             if (ModelState.ErrorCount <= 1)
@@ -430,7 +475,7 @@ namespace scorpioweb.Controllers
                 #region -ConsumoSustancias-
                 for (int i=0; i< datosSustancias.Count;i=i+5)
                 {
-                    if (datosSustancias[i][1] == "iovanni")
+                    if (datosSustancias[i][1] == currentUser)
                     { /*Revisar el cambio de variable "iovanni" por a variable de usuario*/ 
                         consumosustanciasBD.Sustancia = datosSustancias[i][0];
                         consumosustanciasBD.Frecuencia = datosSustancias[i + 1][0];
@@ -442,12 +487,21 @@ namespace scorpioweb.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
+
+                for (int i = 0; i < datosSustancias.Count; i++)
+                {
+                    if (datosSustancias[i][1] == currentUser)
+                    {
+                        datosSustancias.RemoveAt(i);
+                        i--;
+                    }
+                }
                 #endregion
 
                 #region -AsientoFamiliar-
-                for(int i=0; i < datosFamiliares.Count; i = i + 13)
+                for (int i=0; i < datosFamiliares.Count; i = i + 13)
                 {
-                    if (datosFamiliares[i][1] == "iovanni")
+                    if (datosFamiliares[i][1] == currentUser)
                     {
                         asientoFamiliar.Nombre = normaliza(datosFamiliares[i][0]);
                         asientoFamiliar.Relacion = datosFamiliares[i + 1][0];
@@ -473,7 +527,7 @@ namespace scorpioweb.Controllers
                 #region -Referencias-
                 for (int i = 0; i < datosReferencias.Count; i = i + 13)
                 {
-                    if (datosReferencias[i][1] == "iovanni")
+                    if (datosReferencias[i][1] == currentUser)
                     {
                         asientoFamiliar.Nombre = normaliza(datosReferencias[i][0]);
                         asientoFamiliar.Relacion = datosReferencias[i + 1][0];
@@ -494,12 +548,24 @@ namespace scorpioweb.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
+
+                
+
+                for (int i = 0; i < datosReferencias.Count; i ++)
+                {
+                    if (datosReferencias[i][1] == currentUser)
+                    {
+                        datosReferencias.RemoveAt(i);
+                        i--;
+                    }
+                }
+
                 #endregion
 
                 #region -Familiares Extranjero-
                 for (int i = 0; i < datosFamiliaresExtranjero.Count; i = i + 12)
                 {
-                    if (datosFamiliaresExtranjero[i][1] == "iovanni")
+                    if (datosFamiliaresExtranjero[i][1] == currentUser)
                     {
                         familiaresForaneos.Nombre = normaliza(datosFamiliaresExtranjero[i][0]);
                         familiaresForaneos.Relacion = datosFamiliaresExtranjero[i + 1][0];
@@ -516,6 +582,15 @@ namespace scorpioweb.Controllers
                         familiaresForaneos.PersonaIdPersona = idPersona;
                         _context.Add(familiaresForaneos);
                         await _context.SaveChangesAsync();
+                    }
+                }
+
+                for (int i = 0; i < datosFamiliaresExtranjero.Count; i++)
+                {
+                    if (datosFamiliaresExtranjero[i][1] == currentUser)
+                    {
+                        datosFamiliaresExtranjero.RemoveAt(i);
+                        i--;
                     }
                 }
                 #endregion
@@ -546,7 +621,7 @@ namespace scorpioweb.Controllers
 
         public ActionResult Imprimir(int id)
         {
-            var PDFResult = new ViewAsPdf("Details",new { id=id })
+            var PDFResult = new ViewAsPdf("Details")
             {
                 FileName = "Reporte.PDF"
             };

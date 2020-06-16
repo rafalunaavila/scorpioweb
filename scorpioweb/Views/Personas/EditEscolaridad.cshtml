@@ -1,0 +1,66 @@
+﻿@model scorpioweb.Models.Estudios
+
+@{
+    ViewData["Title"] = "EditEscolaridad";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Escolaridad</h2>
+<h3>@ViewData["Nombre"]</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditEscolaridad">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdEstudios" />
+            <div class="form-group">
+                <label asp-for="Estudia" class="control-label"></label>
+                <input asp-for="Estudia" class="form-control" />
+                <span asp-validation-for="Estudia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GradoEstudios" class="control-label"></label>
+                <input asp-for="GradoEstudios" class="form-control" />
+                <span asp-validation-for="GradoEstudios" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstitucionE" class="control-label"></label>
+                <input asp-for="InstitucionE" class="form-control" />
+                <span asp-validation-for="InstitucionE" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Horario" class="control-label"></label>
+                <input asp-for="Horario" class="form-control" />
+                <span asp-validation-for="Horario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observaciones" class="control-label"></label>
+                <input asp-for="Observaciones" class="form-control" />
+                <span asp-validation-for="Observaciones" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PersonaIdPersona" class="control-label"></label>
+                <input asp-for="PersonaIdPersona" class="form-control" />
+                <span asp-validation-for="PersonaIdPersona" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar cambios" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="MenuEdicion" asp-route-id="@Model.PersonaIdPersona">Regresar</a>
+</div>
+

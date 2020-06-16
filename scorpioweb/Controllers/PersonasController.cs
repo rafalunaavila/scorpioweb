@@ -649,6 +649,8 @@ namespace scorpioweb.Controllers
             return View(persona);
         }
 
+
+        #region -Edita Datos Generales-
         // GET: Personas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -696,8 +698,27 @@ namespace scorpioweb.Controllers
             }
             return View(persona);
         }
+        #endregion
 
-        public async Task<IActionResult> EditDomicilio(int id, [Bind("")] Domicilio domicilio)
+        #region -Edita Domicilio-
+        public async Task<IActionResult> EditDomicilio(string nombre, int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewData["Nombre"] = nombre;
+            var domicilio = await _context.Domicilio.SingleOrDefaultAsync(m => m.PersonaIdPersona == id);
+            if (domicilio == null)
+            {
+                return NotFound();
+            }
+            return View(domicilio);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDomicilio(int id, [Bind("IdDomicilio,TipoDomicilio,Calle,No,TipoUbicacion,NombreCf,Pais,Estado,Municipio,Temporalidad,ResidenciaHabitual,Cp,Referencias,Horario,DomcilioSecundario,Observaciones,PersonaIdPersona")] Domicilio domicilio)
         {
             if (id != domicilio.PersonaIdPersona)
             {
@@ -726,9 +747,71 @@ namespace scorpioweb.Controllers
             }
             return View(domicilio);
         }
+        #endregion
+
+        #region -Edita Escolaridad-
+        public async Task<IActionResult> EditEscolaridad(string nombre, int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewData["Nombre"] = nombre;
+            var estudios = await _context.Estudios.SingleOrDefaultAsync(m => m.PersonaIdPersona == id);
+            if (estudios == null)
+            {
+                return NotFound();
+            }
+            return View(estudios);
+        }
+
+        // POST: Estudios/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEscolaridad(int id, [Bind("IdEstudios,Estudia,GradoEstudios,InstitucionE,Horario,Direccion,Telefono,Observaciones,PersonaIdPersona")] Estudios estudios)
+        {
+            if (id != estudios.PersonaIdPersona)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(estudios);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonaExists(estudios.PersonaIdPersona))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(estudios);
+        }
+        #endregion
+
+        #region
+        #endregion
+
+
+
+
 
         #endregion
 
+
+        #region -Borrar-
         // GET: Personas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -757,6 +840,9 @@ namespace scorpioweb.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        #endregion
+
+
 
         private bool PersonaExists(int id)
         {

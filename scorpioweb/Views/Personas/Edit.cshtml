@@ -4,67 +4,57 @@
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Datos Generales</h2>
+<h3>@Model.Paterno @Model.Materno @Model.Nombre</h3>
 
-<h4>Persona</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdPersona" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Paterno" class="control-label"></label>
                 <input asp-for="Paterno" class="form-control" />
                 <span asp-validation-for="Paterno" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Materno" class="control-label"></label>
                 <input asp-for="Materno" class="form-control" />
                 <span asp-validation-for="Materno" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-4">
                 <label asp-for="Alias" class="control-label"></label>
                 <input asp-for="Alias" class="form-control" />
                 <span asp-validation-for="Alias" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Genero" class="control-label"></label>
                 <input asp-for="Genero" class="form-control" />
                 <span asp-validation-for="Genero" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Edad" class="control-label"></label>
                 <input asp-for="Edad" class="form-control" />
                 <span asp-validation-for="Edad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Fnacimiento" class="control-label"></label>
+                <label class="control-label">Fecha de nacimiento</label>
                 <input asp-for="Fnacimiento" class="form-control" />
                 <span asp-validation-for="Fnacimiento" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Lnpais" class="control-label"></label>
+                <label class="control-label">País de nacimiento</label>
                 <input asp-for="Lnpais" class="form-control" />
                 <span asp-validation-for="Lnpais" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Lnestado" class="control-label"></label>
-                <input asp-for="Lnestado" class="form-control" />
-                <span asp-validation-for="Lnestado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lnmunicipio" class="control-label"></label>
-                <input asp-for="Lnmunicipio" class="form-control" />
-                <span asp-validation-for="Lnmunicipio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lnlocalidad" class="control-label"></label>
+                <label class="control-label">Localidad de nacimiento</label>
                 <input asp-for="Lnlocalidad" class="form-control" />
                 <span asp-validation-for="Lnlocalidad" class="text-danger"></span>
             </div>
@@ -154,13 +144,13 @@
                 <span asp-validation-for="UltimaActualización" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Guardar Cambios" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="MenuEdicion" asp-route-id="@Model.IdPersona">Regresar</a>
 </div>
 

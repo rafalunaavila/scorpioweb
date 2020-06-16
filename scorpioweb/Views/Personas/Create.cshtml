@@ -756,7 +756,7 @@
                             <div class="form-group col-md-4" id="EstadoD">
                                 <label class="control-label">Estado</label>
                                 <select class="form-control" name="estadoD" id="estadoD"
-                                        asp-items="@(new SelectList(ViewBag.ListadoEstados, "Id","Estado"))">
+                                        asp-items="@(new SelectList(ViewBag.ListadoEstados, "Id","Estado"))" runat="server">
                                 </select>
                             </div>
                             <div class="form-group col-md-4" id="MunicipioD">
@@ -1262,12 +1262,7 @@
                 <input type="submit" value="Guardar Registro" class="btn btn-default" />
             </div>
         </form>
-        <a href='@Url.Action("borrarConsumo", "Personas")'>
-            <input class="btn-danger" type="button" value="Click Me">
-        </a>
     </div>
-
-
 </div>
 
 

@@ -1,29 +1,117 @@
-﻿.estiloDG {
+﻿/*#region Tablas*/
+.estiloDG {
     background-color: #0078A7;
     color: #fff
 }
+
 .estiloDomicilio {
     background-color: #415667;
     color: #fff
 }
+
 .estiloEstudios {
     background-color: #848F95;
     color: #fff
 }
+
 .estiloTrabajo {
     background-color: #80AEAB;
     color: #fff
 }
+
 .estiloActividad {
     background-color: #233460;
     color: #fff
 }
+
 .estiloAbandonoEstado {
     background-color: #E2E2E2;
     border-color: #fff;
     color: #000;
 }
+
 .estilosSalud {
     background-color: #3D7F99;
     color: #fff
 }
+
+/*#endregion RegionName*/
+
+/*#region MenuEdicion*/
+.btn-huge {
+    padding-top: 10%;
+    padding-bottom: 10%;
+    font-size: 30px;
+}
+
+#datosGenerales {
+    background-color: #0078A7;
+    color: #fff;
+    border-color: #fff;
+}
+
+    #datosGenerales:hover {
+        background-color: #005273;
+    }
+
+#domicilio {
+    background-color: #415667;
+    color: #fff;
+    border-color: #fff;
+}
+
+    #domicilio:hover {
+        background-color: #58758C;
+    }
+
+#escolaridad {
+    background-color: #848F95;
+    color: #fff;
+    border-color: #fff;
+}
+
+    #escolaridad:hover {
+        background-color: #9FACB3;
+    }
+
+#trabajo {
+    background-color: #80AEAB;
+    color: #fff;
+    border-color: #fff;
+}
+
+    #trabajo:hover {
+        background-color: #688C8A;
+    }
+
+#actividadesSociales {
+    background-color: #233460;
+    color: #fff;
+    border-color: #fff;
+}
+
+    #actividadesSociales:hover {
+        background-color: #4061B3;
+    }
+
+#abandonoEstado {
+    background-color: #E2E2E2;
+    border-color: #fff;
+    color: #000;
+}
+
+    #abandonoEstado:hover {
+        background-color: #8C8C8C;
+    }
+
+#salud {
+    background-color: #3D7F99;
+    color: #fff;
+    border-color: #fff;
+}
+
+    #salud:hover {
+        background-color: #61C9F2;
+    }
+/*#endregion MenuEdicion*/
+

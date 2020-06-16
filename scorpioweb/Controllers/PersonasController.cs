@@ -127,14 +127,10 @@ namespace scorpioweb.Controllers
             ViewData["joinTablesDomSec"] = from personaTable in personaVM
                                      join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
                                            join domicilioSec in domicilioSecundarioVM.DefaultIfEmpty() on domicilio.IdDomicilio equals domicilioSec.IdDomicilio
-                                           join domicilioSecEstado in estados on (Int32.Parse(domicilioSec.Estado)) equals domicilioSecEstado.Id
-                                           join domicilioSecMunicipio in municipios on (Int32.Parse(domicilioSec.Municipio)) equals domicilioSecMunicipio.Id
                                            where personaTable.IdPersona == id
                                      select new PersonaViewModel
                                      {
-                                         domicilioSecundarioVM = domicilioSec,
-                                         estadosVMDomicilioSec = domicilioSecEstado,
-                                         municipiosVMDomicilioSec = domicilioSecMunicipio
+                                         domicilioSecundarioVM = domicilioSec
                                      };
 
             ViewData["joinTablesConsumoSustancias"] = from personaTable in personaVM
@@ -184,7 +180,6 @@ namespace scorpioweb.Controllers
             return View();
         }
         #endregion
-
 
         #region -Entrevista de encuadre insertar-
 
@@ -283,22 +278,30 @@ namespace scorpioweb.Controllers
                 return DateTime.ParseExact("1900/01/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
             }
         }
-
-        public ActionResult borrarConsumo()
+        
+        public string generaEstado(string id)
         {
-            string currentUser = User.Identity.Name;
-            for (int i = 0; i < datosSustancias.Count; i++)
+            string estado = "";
+
+            if (!String.IsNullOrEmpty(id))
             {
-                if (datosSustancias[i][1] == currentUser)
-                {
-                    datosSustancias.RemoveAt(i);
-                    i--;
-                }
-            }
-            return Json(new { success = true, responseText = "Datos Guardados con éxito" });
+                List<Estados> estados = _context.Estados.ToList();
+                estado = (estados.FirstOrDefault(x => x.Id == Int32.Parse(id)).Estado).ToUpper();
+            }            
+            return estado;
         }
 
-        
+        public string generaMunicipio(string id)
+        {
+            string municipio = "";
+            if (!String.IsNullOrEmpty(id))
+            {
+                List<Municipios> municipios = _context.Municipios.ToList();
+                municipio = (municipios.FirstOrDefault(x => x.Id == Int32.Parse(id)).Municipio).ToUpper();
+            }            
+            return municipio;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar, Familiaresforaneos familiaresForaneos,
@@ -333,8 +336,8 @@ namespace scorpioweb.Controllers
                 persona.Edad = edad;
                 persona.Fnacimiento = fNacimiento;
                 persona.Lnpais = lnPais;
-                persona.Lnestado = normaliza(lnEstado);
-                persona.Lnmunicipio = lnMunicipio;
+                persona.Lnestado = generaEstado(lnEstado);
+                persona.Lnmunicipio = generaMunicipio(lnMunicipio);
                 persona.Lnlocalidad = lnLocalidad;
                 persona.EstadoCivil = estadoCivil;
                 persona.Duracion = duracion;
@@ -360,8 +363,8 @@ namespace scorpioweb.Controllers
                 domicilio.No = normaliza(no);
                 domicilio.NombreCf = normaliza(nombreCF);
                 domicilio.Pais = paisD;
-                domicilio.Estado = estadoD;
-                domicilio.Municipio = municipioD;
+                domicilio.Estado =generaEstado(estadoD);
+                domicilio.Municipio =generaMunicipio(municipioD);
                 domicilio.Temporalidad = temporalidad;
                 domicilio.ResidenciaHabitual = normaliza(residenciaHabitual);
                 domicilio.Cp = normaliza(cp);
@@ -378,8 +381,8 @@ namespace scorpioweb.Controllers
                 domiciliosecundario.No = normaliza(noDS);
                 domiciliosecundario.NombreCf = normaliza(nombreCFDS);
                 domiciliosecundario.Pais = paisDDS;
-                domiciliosecundario.Estado = estadoDDS;
-                domiciliosecundario.Municipio = municipioDDS;
+                domiciliosecundario.Estado =generaEstado(estadoDDS);
+                domiciliosecundario.Municipio =generaMunicipio(municipioDDS);
                 domiciliosecundario.Temporalidad = temporalidadDS;                
                 domiciliosecundario.ResidenciaHabitual = normaliza(residenciaHabitualDS);
                 domiciliosecundario.Cp = normaliza(cpDS);
@@ -629,6 +632,23 @@ namespace scorpioweb.Controllers
         }
         #endregion
 
+        #region -Edicion-        
+
+        public async Task<IActionResult> MenuEdicion(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var persona = await _context.Persona.SingleOrDefaultAsync(m => m.IdPersona == id);
+            if (persona == null)
+            {
+                return NotFound();
+            }
+            return View(persona);
+        }
+
         // GET: Personas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -645,9 +665,6 @@ namespace scorpioweb.Controllers
             return View(persona);
         }
 
-        // POST: Personas/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización")] Persona persona)
@@ -679,6 +696,38 @@ namespace scorpioweb.Controllers
             }
             return View(persona);
         }
+
+        public async Task<IActionResult> EditDomicilio(int id, [Bind("")] Domicilio domicilio)
+        {
+            if (id != domicilio.PersonaIdPersona)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(domicilio);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonaExists(domicilio.PersonaIdPersona))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(domicilio);
+        }
+
+        #endregion
 
         // GET: Personas/Delete/5
         public async Task<IActionResult> Delete(int? id)

@@ -8,7 +8,7 @@
 
 @foreach (var item in ViewData["joinTables"] as IEnumerable<scorpioweb.Models.PersonaViewModel>)
 {
-<div style="text-align:right">@Html.ActionLink("Imprimir persona", "Imprimir", new { id = item.personaVM.IdPersona })</div>
+<div style="text-align:right">@Html.ActionLink("Genera Estado", "generaEstado", new { id = "" })</div>
     <div class="btn">
         @{Html.BeginForm("ExportToPDF","Personas", FormMethod.Post);
             {
@@ -41,7 +41,7 @@
                                 <td class="estiloDG">Fecha de nacimiento</td>
                                 <td>@item.personaVM.Fnacimiento</td>
                                 <td class="estiloDG">Lugar de nacimiento</td>
-                                @*<td>@item.personaVM.Lnpais, @item.estadosVMPersona.Estado, @item.municipiosVMPersona.Municipio </td>*@
+                                <td>@item.personaVM.Lnpais, @item.personaVM.Lnestado, @item.personaVM.Lnmunicipio </td>
                             </tr>
                             <tr>
                             </tr>
@@ -138,8 +138,8 @@
                             </tr>
                             <tr>
                                 <td class="estiloDomicilio" colspan="1">Dirección</td>
-                                @*<td colspan="2">@item.domicilioVM.Calle @item.domicilioVM.No, @item.domicilioVM.NombreCf CP @item.domicilioVM.Cp, @item.estadosVMDomicilio.Estado, @item.municipiosVMDomicilio.Municipio</td>
-                                <td colspan="1"><a href="https://www.google.com.mx/maps/place/ @item.domicilioVM.Calle @item.domicilioVM.No, @item.domicilioVM.NombreCf, , @item.estadosVMDomicilio.Estado, @item.municipiosVMDomicilio.Municipio" target="_blank">Ir al Mapa</a></td>*@
+                                <td colspan="2">@item.domicilioVM.Calle @item.domicilioVM.No, @item.domicilioVM.NombreCf CP @item.domicilioVM.Cp, @item.domicilioVM.Estado, @item.domicilioVM.Municipio</td>
+                                <td colspan="1"><a href="https://www.google.com.mx/maps/place/ @item.domicilioVM.Calle @item.domicilioVM.No, @item.domicilioVM.NombreCf, , @item.domicilioVM.Estado, @item.domicilioVM.Municipio" target="_blank">Ir al Mapa</a></td>
                             </tr>
                             <tr>
                                 <td class="estiloDomicilio" style="width:25%">Tiempo viviendo en el domicilio</td>
@@ -619,8 +619,8 @@
                         </tr>
                         <tr>
                             <td class="estiloDomicilio" colspan="1">Dirección</td>
-                            <td colspan="2">@item.domicilioSecundarioVM.Calle @item.domicilioSecundarioVM.No, @item.domicilioSecundarioVM.NombreCf CP @item.domicilioSecundarioVM.Cp, @item.estadosVMDomicilioSec.Estado, @item.municipiosVMDomicilioSec.Municipio</td>
-                            <td colspan="1"><a href="https://www.google.com.mx/maps/place/ @item.domicilioSecundarioVM.Calle @item.domicilioSecundarioVM.No, @item.domicilioSecundarioVM.NombreCf, , @item.estadosVMDomicilioSec.Estado, @item.municipiosVMDomicilioSec.Municipio" target="_blank">Ir al Mapa</a></td>
+                            <td colspan="2">@item.domicilioSecundarioVM.Calle @item.domicilioSecundarioVM.No, @item.domicilioSecundarioVM.NombreCf CP @item.domicilioSecundarioVM.Cp, @item.domicilioSecundarioVM.Estado, @item.domicilioSecundarioVM.Municipio</td>
+                            <td colspan="1"><a href="https://www.google.com.mx/maps/place/ @item.domicilioSecundarioVM.Calle @item.domicilioSecundarioVM.No, @item.domicilioSecundarioVM.NombreCf, , @item.domicilioSecundarioVM.Estado, @item.domicilioSecundarioVM.Municipio" target="_blank">Ir al Mapa</a></td>
                         </tr>
                         <tr>
                             <td class="estiloDomicilio" style="width:25%">Tiempo viviendo en el domicilio</td>

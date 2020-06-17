@@ -25,20 +25,20 @@
             <a asp-action="EditEscolaridad" asp-route-nombre="@Model.Paterno @Model.Materno @Model.Nombre" asp-route-id="@Model.IdPersona" id="escolaridad"class="btn btn-primary btn-lg btn-block btn-huge">Escolaridad</a>
         </div>
         <div class="col-md-6" style="padding-top:3%;">
-            <a id="trabajo" class="btn btn-primary btn-lg btn-block btn-huge">Trabajo</a>
+            <a asp-action="EditTrabajo" asp-route-nombre="@Model.Paterno @Model.Materno @Model.Nombre" asp-route-id="@Model.IdPersona" id="trabajo" class="btn btn-primary btn-lg btn-block btn-huge">Trabajo</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6" style="padding-top:3%;">
-            <a id="actividadesSociales" class="btn btn-primary btn-lg btn-block btn-huge">Actividades Sociales</a>
+            <a asp-action="EditActividadesSociales" asp-route-nombre="@Model.Paterno @Model.Materno @Model.Nombre" asp-route-id="@Model.IdPersona" id="actividadesSociales" class="btn btn-primary btn-lg btn-block btn-huge">Actividades Sociales</a>
         </div>
         <div class="col-md-6" style="padding-top:3%;">
-            <a id="abandonoEstado" class="btn btn-primary btn-lg btn-block btn-huge">Viajes fuera del Estado</a>
+            <a asp-action="EditAbandonoEstado" asp-route-nombre="@Model.Paterno @Model.Materno @Model.Nombre" asp-route-id="@Model.IdPersona" id="abandonoEstado" class="btn btn-primary btn-lg btn-block btn-huge">Viajes fuera del Estado</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6" style="padding-top:3%;">
-            <a id="salud" class="btn btn-primary btn-lg btn-block btn-huge">Salud</a>
+            <a asp-action="EditSalud" asp-route-nombre="@Model.Paterno @Model.Materno @Model.Nombre" asp-route-id="@Model.IdPersona" id="salud" class="btn btn-primary btn-lg btn-block btn-huge">Salud</a>
         </div>
     </div>
 </div>

@@ -801,7 +801,203 @@ namespace scorpioweb.Controllers
         }
         #endregion
 
-        #region
+        #region -Edita Trabajo-
+        public async Task<IActionResult> EditTrabajo(string nombre, int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewData["Nombre"] = nombre;
+            var trabajo = await _context.Trabajo.SingleOrDefaultAsync(m => m.PersonaIdPersona == id);
+            if (trabajo == null)
+            {
+                return NotFound();
+            }
+            return View(trabajo);
+        }
+
+        // POST: Trabajoes/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditTrabajo(int id, [Bind("IdTrabajo,Trabaja,TipoOcupacion,Puesto,EmpledorJefe,EnteradoProceso,SePuedeEnterar,TiempoTrabajano,Salario,TemporalidadSalario,Direccion,Horario,Telefono,Observaciones,PersonaIdPersona")] Trabajo trabajo)
+        {
+            if (id != trabajo.PersonaIdPersona)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(trabajo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonaExists(trabajo.PersonaIdPersona))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(trabajo);
+        }
+        #endregion
+
+        #region -Edita Actividades Sociales-
+        public async Task<IActionResult> EditActividadesSociales(string nombre, int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewData["Nombre"] = nombre;
+            var actividadsocial = await _context.Actividadsocial.SingleOrDefaultAsync(m => m.PersonaIdPersona == id);
+            if (actividadsocial == null)
+            {
+                return NotFound();
+            }
+            return View(actividadsocial);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditActividadesSociales(int id, [Bind("IdActividadSocial,TipoActividad,Horario,Lugar,Telefono,SePuedeEnterar,Referencia,Observaciones,PersonaIdPersona")] Actividadsocial actividadsocial)
+        {
+            if (id != actividadsocial.PersonaIdPersona)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(actividadsocial);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonaExists(actividadsocial.PersonaIdPersona))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(actividadsocial);
+        }
+        #endregion
+
+        #region -Edita Abandono Estado-
+        public async Task<IActionResult> EditAbandonoEstado(string nombre, int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewData["Nombre"] = nombre;
+            var abandonoestado = await _context.Abandonoestado.SingleOrDefaultAsync(m => m.PersonaIdPersona == id);
+            if (abandonoestado == null)
+            {
+                return NotFound();
+            }
+            return View(abandonoestado);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAbandonoEstado(int id, [Bind("IdAbandonoEstado,VividoFuera,LugaresVivido,TiempoVivido,MotivoVivido,ViajaHabitual,LugaresViaje,TiempoViaje,MotivoViaje,DocumentacionSalirPais,Pasaporte,Visa,FamiliaresFuera,Cuantos,PersonaIdPersona")] Abandonoestado abandonoestado)
+        {
+            if (id != abandonoestado.PersonaIdPersona)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(abandonoestado);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonaExists(abandonoestado.PersonaIdPersona))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(abandonoestado);
+        }
+        #endregion
+
+        #region -Editar Salud-
+        public async Task<IActionResult> EditSalud(string nombre, int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewData["Nombre"] = nombre;
+            var saludfisica = await _context.Saludfisica.SingleOrDefaultAsync(m => m.PersonaIdPersona == id);
+            if (saludfisica == null)
+            {
+                return NotFound();
+            }
+            return View(saludfisica);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSalud(int id, [Bind("IdSaludFisica,Enfermedad,EspecifiqueEnfermedad,EmbarazoLactancia,Tiempo,Tratamiento,Discapacidad,EspecifiqueDiscapacidad,ServicioMedico,EspecifiqueServicioMedico,InstitucionServicioMedico,Observaciones,PersonaIdPersona")] Saludfisica saludfisica)
+        {
+            if (id != saludfisica.PersonaIdPersona)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(saludfisica);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonaExists(saludfisica.PersonaIdPersona))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(saludfisica);
+        }
         #endregion
 
 

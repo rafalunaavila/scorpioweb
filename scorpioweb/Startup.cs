@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using scorpioweb.Data;
 using scorpioweb.Models;
 using scorpioweb.Services;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace scorpioweb
 {
@@ -42,7 +44,9 @@ namespace scorpioweb
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddMvc();
+            services.AddMvc(options => {
+                var policy = new AutorizationPolicyBuilder();
+            }).AddXmlSerializerFormatters();  
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
         }

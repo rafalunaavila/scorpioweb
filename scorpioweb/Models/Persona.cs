@@ -34,5 +34,6 @@ namespace scorpioweb.Models
         public string Curp { get; set; }
         public string ConsumoSustancias { get; set; }
         public DateTime? UltimaActualización { get; set; }
+        public string Supervisor { get; set; }
     }
 }

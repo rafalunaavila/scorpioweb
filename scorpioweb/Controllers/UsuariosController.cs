@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scorpioweb.Data;
 using scorpioweb.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace scorpioweb.Controllers
 {
@@ -54,7 +53,7 @@ namespace scorpioweb.Controllers
                     Role = usuarioRole[0].Text
                 });
             }
-            return View(usuario.ToList());
+            return View(usuario);
             //return View(await _context.ApplicationUser.ToListAsync());
         }
 

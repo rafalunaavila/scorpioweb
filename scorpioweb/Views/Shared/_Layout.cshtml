@@ -73,6 +73,11 @@
                     <li><a asp-area="" asp-controller="Firmas" asp-action="Create">Firmas</a></li>
                     <li><a asp-area="" asp-controller="Personas" asp-action="Create">Entrevista</a></li>
                     <li><a asp-area="" asp-controller="Personas" asp-action="Index">Lista</a></li>
+                    @if (User.Identity.Name == "iovannifs92@gmail.com")
+                    {
+                        <li><a asp-area="" asp-controller="Administration" asp-action="CreateRole">Crear Roles</a></li>
+                    }
+                    <li><a asp-area="" asp-controller="Personas" asp-action="MenuMCSCP">MC y SCP</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

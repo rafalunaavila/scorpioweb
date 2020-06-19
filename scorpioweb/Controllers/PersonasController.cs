@@ -17,9 +17,11 @@ using Syncfusion.Pdf;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace scorpioweb.Controllers
 {
+    [Authorize]
     public class PersonasController : Controller
     {
         //To get content root path of the project
@@ -60,6 +62,12 @@ namespace scorpioweb.Controllers
         public async Task<IActionResult> Index()
         {            
             return View(await _context.Persona.ToListAsync());
+        }
+
+        public IActionResult MenuMCSCP()
+        {
+
+            return View();
         }
 
         #region -Detalles-
@@ -185,7 +193,7 @@ namespace scorpioweb.Controllers
 
         public ActionResult guardarSustancia(string[] datosConsumo)
         {
-            string currentUser = User.Identity.Name;
+            string currentUser = User.Identity.Name;            
             for (int i = 0; i < datosConsumo.Length; i++)
             {
                 datosSustancias.Add(new List<String> { datosConsumo[i], currentUser });
@@ -247,7 +255,7 @@ namespace scorpioweb.Controllers
         // GET: Personas/Create
         [Authorize(Roles = "Administrador")]
         public IActionResult Create(Estados Estados)
-        {
+        {            
             //datosSustancias.Clear();            
             List<Estados> listaEstados = new List<Estados>();
             listaEstados = (from table in _context.Estados
@@ -669,7 +677,7 @@ namespace scorpioweb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("IdPersona,Nombre,Paterno,Materno,Alias,Genero,Edad,Fnacimiento,Lnpais,Lnestado,Lnmunicipio,Lnlocalidad,EstadoCivil,Duracion,OtroIdioma,EspecifiqueIdioma,DatosGeneralescol,LeerEscribir,Traductor,EspecifiqueTraductor,TelefonoFijo,Celular,Hijos,Nhijos,NpersonasVive,Propiedades,Curp,ConsumoSustancias,UltimaActualización,Supervisor")] Persona persona)
         {
             if (id != persona.IdPersona)
             {
@@ -999,10 +1007,6 @@ namespace scorpioweb.Controllers
             return View(saludfisica);
         }
         #endregion
-
-
-
-
 
         #endregion
 

@@ -4,6 +4,42 @@
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-
-<h2>MenuMCSCP</h2>
+<div class="card-group" style="padding-top:2%">
+    <div class="col-md-4 card">
+        <img class="card-img-top" src="~/images/asignacion.png" alt="Card image cap">
+        <div class="card-body">
+            <h4 class="card-title"><a asp-controller="Personas" asp-action="AsignacionSupervision">Asignación de supervisión</a></h4>
+            <p class="card-text">
+                Asignación de nuevas supervisiónes
+            </p>
+        </div>
+    </div>
+    <div class="col-md-4 card">
+        <img class="card-img-top" src="~/images/persona.png" alt="Card image cap">
+        <div class="card-body">
+            <h4 class="card-title">
+                @if (User.Identity.Name == "yoena@dgepms.com")
+                {
+                    <a asp-controller="Personas" asp-action="Index">Supervisados</a>
+                }
+                else
+                {
+                    <a asp-controller="Personas" asp-action="ListadoSupervisor">Supervisados</a>
+                }
+            </h4>
+            <p class="card-text">
+                Base de datos de todos los supervisados
+            </p>
+        </div>
+    </div>
+    <div class="col-md-4 card">
+        <img class="card-img-bottom" src="~/images/growth.png" alt="Card image cap">
+        <div class="card-body">
+            <h4 class="card-title"><a>Indicadores</a></h4>
+            <p class="card-text">
+                Indicadores relevantes de la supervisión de la Coordinación de Medidas Cautelares y Suspensión Condicional del Proceso
+            </p>
+        </div>
+    </div>
+</div>
 

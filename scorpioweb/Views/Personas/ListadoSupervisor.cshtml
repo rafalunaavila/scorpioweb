@@ -1,0 +1,43 @@
+﻿@model IEnumerable<scorpioweb.Models.Persona>
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supervisor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Where(u => u.Supervisor == User.Identity.Name))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supervisor)
+                </td>
+
+                <td>
+                    <a asp-action="MenuEdicion" asp-route-id="@item.IdPersona">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdPersona">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdPersona">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

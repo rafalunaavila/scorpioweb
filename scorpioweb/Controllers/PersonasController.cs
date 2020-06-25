@@ -30,16 +30,21 @@ namespace scorpioweb.Controllers
         #region -Variables Globales-
         private readonly penas2Context _context;
         public static int contadorSustancia = 0;
-        public static List<List<string>> datosSustancias =new List<List<string>>();
+        public static List<List<string>> datosSustancias = new List<List<string>>();
         public static List<List<string>> datosFamiliares = new List<List<string>>();
         public static List<List<string>> datosReferencias = new List<List<string>>();
         public static List<List<string>> datosFamiliaresExtranjero = new List<List<string>>();
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         #endregion
-        
-        public PersonasController(penas2Context context, IHostingEnvironment hostingEnvironment)
+
+        public PersonasController(penas2Context context, IHostingEnvironment hostingEnvironment,
+                                  RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            this.roleManager = roleManager;
+            this.userManager = userManager;
         }
 
         public IActionResult ExportToPDF()
@@ -60,9 +65,69 @@ namespace scorpioweb.Controllers
 
         // GET: Personas
         public async Task<IActionResult> Index()
-        {            
+        {
             return View(await _context.Persona.ToListAsync());
         }
+
+        public async Task<IActionResult> ListadoSupervisor()
+        {
+            return View(await _context.Persona.ToListAsync());
+        }
+
+        #region -AsignaSupervision-
+
+        public async Task<IActionResult> AsignacionSupervision()
+        {
+            List<SelectListItem> ListaUsuarios = new List<SelectListItem>();
+            int i = 0;
+            foreach (var user in userManager.Users)
+            {
+                if (await userManager.IsInRoleAsync(user, "SupervisorMCSCP"))
+                {
+                    ListaUsuarios.Add(new SelectListItem
+                    {
+                        Text = user.ToString(),
+                        Value = i.ToString()
+                    });
+                    i++;
+                }
+            }
+            ViewBag.ListadoUsuarios = ListaUsuarios;
+            return View(await _context.Persona.ToListAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSupervisor(Persona persona)
+        {
+            int id = persona.IdPersona;
+            string supervisor = persona.Supervisor;
+
+            var personaUpdate = await _context.Persona
+                .FirstOrDefaultAsync(p => p.IdPersona == id);
+
+            personaUpdate.Supervisor = supervisor;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PersonaExists(persona.IdPersona))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return View(persona);
+        }
+
+        #endregion
 
         public IActionResult MenuMCSCP()
         {
@@ -114,56 +179,56 @@ namespace scorpioweb.Controllers
                                      //join domicilioEstado in estados on (Int32.Parse(domicilio.Estado)) equals domicilioEstado.Id
                                      //join domicilioMunicipio in municipios on (Int32.Parse(domicilio.Municipio)) equals domicilioMunicipio.Id
                                      where personaTable.IdPersona == id
-                                    select new PersonaViewModel
-                                    {
-                                        personaVM = personaTable,
-                                        domicilioVM = domicilio,
-                                        estudiosVM = estudios,
-                                        trabajoVM = trabajo,
-                                        actividadSocialVM=actividaSocial,
-                                        abandonoEstadoVM=abandonoEstado,
-                                        saludFisicaVM=saludFisica
-                                        //estadosVMPersona=nacimientoEstado,
-                                        //municipiosVMPersona=nacimientoMunicipio,
-                                        //estadosVMDomicilio = domicilioEstado,
-                                        //municipiosVMDomicilio= domicilioMunicipio,
-                                    };
+                                     select new PersonaViewModel
+                                     {
+                                         personaVM = personaTable,
+                                         domicilioVM = domicilio,
+                                         estudiosVM = estudios,
+                                         trabajoVM = trabajo,
+                                         actividadSocialVM = actividaSocial,
+                                         abandonoEstadoVM = abandonoEstado,
+                                         saludFisicaVM = saludFisica
+                                         //estadosVMPersona=nacimientoEstado,
+                                         //municipiosVMPersona=nacimientoMunicipio,
+                                         //estadosVMDomicilio = domicilioEstado,
+                                         //municipiosVMDomicilio= domicilioMunicipio,
+                                     };
 
             #endregion
 
             #region -JoinTables null-
             ViewData["joinTablesDomSec"] = from personaTable in personaVM
-                                     join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
+                                           join domicilio in domicilioVM on persona.IdPersona equals domicilio.PersonaIdPersona
                                            join domicilioSec in domicilioSecundarioVM.DefaultIfEmpty() on domicilio.IdDomicilio equals domicilioSec.IdDomicilio
-                                           where personaTable.IdPersona == id
-                                     select new PersonaViewModel
-                                     {
-                                         domicilioSecundarioVM = domicilioSec
-                                     };
-
-            ViewData["joinTablesConsumoSustancias"] = from personaTable in personaVM
-                                           join sustancias in consumoSustanciasVM on persona.IdPersona equals sustancias.PersonaIdPersona
                                            where personaTable.IdPersona == id
                                            select new PersonaViewModel
                                            {
-                                               consumoSustanciasVM = sustancias
+                                               domicilioSecundarioVM = domicilioSec
                                            };
 
-            ViewData["joinTablesFamiliaresForaneos"] = from personaTable in personaVM
-                                                      join familiarForaneo in familiaresForaneosVM on persona.IdPersona equals familiarForaneo.PersonaIdPersona
+            ViewData["joinTablesConsumoSustancias"] = from personaTable in personaVM
+                                                      join sustancias in consumoSustanciasVM on persona.IdPersona equals sustancias.PersonaIdPersona
                                                       where personaTable.IdPersona == id
                                                       select new PersonaViewModel
                                                       {
-                                                          familiaresForaneosVM = familiarForaneo
+                                                          consumoSustanciasVM = sustancias
                                                       };
 
-            ViewData["joinTablesFamiliares"] = from personaTable in personaVM
-                                                       join familiar in asientoFamiliarVM on persona.IdPersona equals familiar.PersonaIdPersona
-                                                       where personaTable.IdPersona == id && familiar.Tipo=="FAMILIAR"
+            ViewData["joinTablesFamiliaresForaneos"] = from personaTable in personaVM
+                                                       join familiarForaneo in familiaresForaneosVM on persona.IdPersona equals familiarForaneo.PersonaIdPersona
+                                                       where personaTable.IdPersona == id
                                                        select new PersonaViewModel
                                                        {
-                                                           asientoFamiliarVM = familiar
+                                                           familiaresForaneosVM = familiarForaneo
                                                        };
+
+            ViewData["joinTablesFamiliares"] = from personaTable in personaVM
+                                               join familiar in asientoFamiliarVM on persona.IdPersona equals familiar.PersonaIdPersona
+                                               where personaTable.IdPersona == id && familiar.Tipo == "FAMILIAR"
+                                               select new PersonaViewModel
+                                               {
+                                                   asientoFamiliarVM = familiar
+                                               };
 
             ViewData["joinTablesReferencia"] = from personaTable in personaVM
                                                join referencia in asientoFamiliarVM on persona.IdPersona equals referencia.PersonaIdPersona
@@ -193,7 +258,7 @@ namespace scorpioweb.Controllers
 
         public ActionResult guardarSustancia(string[] datosConsumo)
         {
-            string currentUser = User.Identity.Name;            
+            string currentUser = User.Identity.Name;
             for (int i = 0; i < datosConsumo.Length; i++)
             {
                 datosSustancias.Add(new List<String> { datosConsumo[i], currentUser });
@@ -255,7 +320,7 @@ namespace scorpioweb.Controllers
         // GET: Personas/Create
         [Authorize(Roles = "Administrador")]
         public IActionResult Create(Estados Estados)
-        {            
+        {
             //datosSustancias.Clear();            
             List<Estados> listaEstados = new List<Estados>();
             listaEstados = (from table in _context.Estados
@@ -286,7 +351,7 @@ namespace scorpioweb.Controllers
                 return DateTime.ParseExact("1900/01/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
             }
         }
-        
+
         public string generaEstado(string id)
         {
             string estado = "";
@@ -295,7 +360,7 @@ namespace scorpioweb.Controllers
             {
                 List<Estados> estados = _context.Estados.ToList();
                 estado = (estados.FirstOrDefault(x => x.Id == Int32.Parse(id)).Estado).ToUpper();
-            }            
+            }
             return estado;
         }
 
@@ -306,7 +371,7 @@ namespace scorpioweb.Controllers
             {
                 List<Municipios> municipios = _context.Municipios.ToList();
                 municipio = (municipios.FirstOrDefault(x => x.Id == Int32.Parse(id)).Municipio).ToUpper();
-            }            
+            }
             return municipio;
         }
 
@@ -314,12 +379,12 @@ namespace scorpioweb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Persona persona, Domicilio domicilio, Estudios estudios, Trabajo trabajo, Actividadsocial actividadsocial, Abandonoestado abandonoEstado, Saludfisica saludfisica, Domiciliosecundario domiciliosecundario, Consumosustancias consumosustanciasBD, Asientofamiliar asientoFamiliar, Familiaresforaneos familiaresForaneos,
             string nombre, string paterno, string materno, string alias, string sexo, int edad, DateTime fNacimiento, string lnPais,
-            string lnEstado, string lnMunicipio, string lnLocalidad, string estadoCivil, string duracion, string otroIdioma, string especifiqueIdioma, 
+            string lnEstado, string lnMunicipio, string lnLocalidad, string estadoCivil, string duracion, string otroIdioma, string especifiqueIdioma,
             string leerEscribir, string traductor, string especifiqueTraductor, string telefonoFijo, string celular, string hijos, int nHijos, int nPersonasVive,
             string propiedades, string CURP, string consumoSustancias,
             string tipoDomicilio, string calle, string no, string nombreCF, string paisD, string estadoD, string municipioD, string temporalidad,
             string residenciaHabitual, string cp, string referencias, string horario, string observaciones, string cuentaDomicilioSecundario,
-            string motivoDS,string tipoDomicilioDS, string calleDS, string noDS, string nombreCFDS, string paisDDS, string estadoDDS, string municipioDDS, string temporalidadDS,
+            string motivoDS, string tipoDomicilioDS, string calleDS, string noDS, string nombreCFDS, string paisDDS, string estadoDDS, string municipioDDS, string temporalidadDS,
             string residenciaHabitualDS, string cpDS, string referenciasDS, string horarioDS, string observacionesDS,
             string estudia, string gradoEstudios, string institucionE, string horarioE, string direccionE, string telefonoE, string observacionesE,
             string trabaja, string tipoOcupacion, string puesto, string empleadorJefe, string enteradoProceso, string sePuedeEnterar, string tiempoTrabajando,
@@ -371,8 +436,8 @@ namespace scorpioweb.Controllers
                 domicilio.No = normaliza(no);
                 domicilio.NombreCf = normaliza(nombreCF);
                 domicilio.Pais = paisD;
-                domicilio.Estado =generaEstado(estadoD);
-                domicilio.Municipio =generaMunicipio(municipioD);
+                domicilio.Estado = generaEstado(estadoD);
+                domicilio.Municipio = generaMunicipio(municipioD);
                 domicilio.Temporalidad = temporalidad;
                 domicilio.ResidenciaHabitual = normaliza(residenciaHabitual);
                 domicilio.Cp = normaliza(cp);
@@ -389,9 +454,9 @@ namespace scorpioweb.Controllers
                 domiciliosecundario.No = normaliza(noDS);
                 domiciliosecundario.NombreCf = normaliza(nombreCFDS);
                 domiciliosecundario.Pais = paisDDS;
-                domiciliosecundario.Estado =generaEstado(estadoDDS);
-                domiciliosecundario.Municipio =generaMunicipio(municipioDDS);
-                domiciliosecundario.Temporalidad = temporalidadDS;                
+                domiciliosecundario.Estado = generaEstado(estadoDDS);
+                domiciliosecundario.Municipio = generaMunicipio(municipioDDS);
+                domiciliosecundario.Temporalidad = temporalidadDS;
                 domiciliosecundario.ResidenciaHabitual = normaliza(residenciaHabitualDS);
                 domiciliosecundario.Cp = normaliza(cpDS);
                 domiciliosecundario.Referencias = normaliza(referenciasDS);
@@ -484,10 +549,10 @@ namespace scorpioweb.Controllers
                 #endregion
 
                 #region -ConsumoSustancias-
-                for (int i=0; i< datosSustancias.Count;i=i+5)
+                for (int i = 0; i < datosSustancias.Count; i = i + 5)
                 {
                     if (datosSustancias[i][1] == currentUser)
-                    { /*Revisar el cambio de variable "iovanni" por a variable de usuario*/ 
+                    { /*Revisar el cambio de variable "iovanni" por a variable de usuario*/
                         consumosustanciasBD.Sustancia = datosSustancias[i][0];
                         consumosustanciasBD.Frecuencia = datosSustancias[i + 1][0];
                         consumosustanciasBD.Cantidad = normaliza(datosSustancias[i + 2][0]);
@@ -510,17 +575,17 @@ namespace scorpioweb.Controllers
                 #endregion
 
                 #region -AsientoFamiliar-
-                for (int i=0; i < datosFamiliares.Count; i = i + 13)
+                for (int i = 0; i < datosFamiliares.Count; i = i + 13)
                 {
                     if (datosFamiliares[i][1] == currentUser)
                     {
                         asientoFamiliar.Nombre = normaliza(datosFamiliares[i][0]);
                         asientoFamiliar.Relacion = datosFamiliares[i + 1][0];
-                        asientoFamiliar.Edad = Int32.Parse(datosFamiliares[i+2][0]);
+                        asientoFamiliar.Edad = Int32.Parse(datosFamiliares[i + 2][0]);
                         asientoFamiliar.Sexo = datosFamiliares[i + 3][0];
-                        asientoFamiliar.Dependencia = datosFamiliares[i+4][0];
-                        asientoFamiliar.DependenciaExplica = normaliza(datosFamiliares[i+5][0]);
-                        asientoFamiliar.VivenJuntos = datosFamiliares[i+6][0];
+                        asientoFamiliar.Dependencia = datosFamiliares[i + 4][0];
+                        asientoFamiliar.DependenciaExplica = normaliza(datosFamiliares[i + 5][0]);
+                        asientoFamiliar.VivenJuntos = datosFamiliares[i + 6][0];
                         asientoFamiliar.Domicilio = normaliza(datosFamiliares[i + 7][0]);
                         asientoFamiliar.Telefono = datosFamiliares[i + 8][0];
                         asientoFamiliar.HorarioLocalizacion = normaliza(datosFamiliares[i + 9][0]);
@@ -560,9 +625,9 @@ namespace scorpioweb.Controllers
                     }
                 }
 
-                
 
-                for (int i = 0; i < datosReferencias.Count; i ++)
+
+                for (int i = 0; i < datosReferencias.Count; i++)
                 {
                     if (datosReferencias[i][1] == currentUser)
                     {
@@ -1010,7 +1075,6 @@ namespace scorpioweb.Controllers
 
         #endregion
 
-
         #region -Borrar-
         // GET: Personas/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -1041,7 +1105,6 @@ namespace scorpioweb.Controllers
             return RedirectToAction(nameof(Index));
         }
         #endregion
-
 
 
         private bool PersonaExists(int id)

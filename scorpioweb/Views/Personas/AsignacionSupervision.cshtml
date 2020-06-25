@@ -1,0 +1,57 @@
+﻿@model IEnumerable<scorpioweb.Models.Persona>
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supervisor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Where(u => u.Supervisor == null))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    <form asp-action="EditSupervisor">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>                        
+                        <div class="form-group">
+                            <input type="hidden" asp-for="@item.IdPersona" name="IdPersona" id="IdPersona"/>
+                            <select class="form-control" name="Supervisor" id="Supervisor"
+                                    asp-items="@(new SelectList(ViewBag.ListadoUsuarios, "Text","Text"))">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Guardar Cambios" class="btn btn-success" />
+                        </div>
+                    </form>
+                    <select class="form-control" name="supervisor" id="supervisor"
+                            asp-items="@(new SelectList(ViewBag.ListadoUsuarios, "Text","Text"))">
+                    </select>
+                </td>
+
+                <td>
+                    <a asp-action="EditSupervisor" asp-route-id="@item.IdPersona">Asignar</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdPersona">Details</a> |
+                    @*<a asp-action="Delete" asp-route-id="@item.IdPersona">Delete</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

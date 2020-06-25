@@ -72,10 +72,11 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contacto</a></li>
                     <li><a asp-area="" asp-controller="Firmas" asp-action="Create">Firmas</a></li>
                     <li><a asp-area="" asp-controller="Personas" asp-action="Create">Entrevista</a></li>
-                    <li><a asp-area="" asp-controller="Personas" asp-action="Index">Lista</a></li>
+                    <li><a asp-area="" asp-controller="Personas" asp-action="ListadoSupervisor">Supervisados</a></li>
                     @if (User.Identity.Name == "iovannifs92@gmail.com")
                     {
-                        <li><a asp-area="" asp-controller="Administration" asp-action="CreateRole">Crear Roles</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Nuevo Usuario</a></li>
+                        <li><a asp-area="" asp-controller="Administration" asp-action="ListRoles">Administracion</a></li>
                     }
                     <li><a asp-area="" asp-controller="Personas" asp-action="MenuMCSCP">MC y SCP</a></li>
                 </ul>
@@ -121,32 +122,32 @@
 
     <a href="javascript:void(0);" id="back-top"><i class="fa fa-angle-up fa-3x" id="fangle"></i></a>
 
-     @*Essential jQuery Plugins
-    ==================================================*@ 
-     @*Main jQuery*@ 
+    @*Essential jQuery Plugins
+        ==================================================*@
+    @*Main jQuery*@
     <script src="js/jquery-1.11.1.min.js"></script>
-     @*Single Page Nav*@ 
+    @*Single Page Nav*@
     <script src="js/jquery.singlePageNav.min.js"></script>
-     @*Twitter Bootstrap*@ 
+    @*Twitter Bootstrap*@
     <script src="js/bootstrap.min.js"></script>
-     @*jquery.fancybox.pack*@ 
+    @*jquery.fancybox.pack*@
     <script src="js/jquery.fancybox.pack.js"></script>
-     @*jquery.mixitup.min*@ 
+    @*jquery.mixitup.min*@
     <script src="js/jquery.mixitup.min.js"></script>
-     @*jquery.parallax*@ 
+    @*jquery.parallax*@
     <script src="js/jquery.parallax-1.1.3.js"></script>
-     @*jquery.countTo*@ 
+    @*jquery.countTo*@
     <script src="js/jquery-countTo.js"></script>
-     @*jquery.appear*@ 
+    @*jquery.appear*@
     <script src="js/jquery.appear.js"></script>
-     @*Contact form validation*@ 
+    @*Contact form validation*@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.32/jquery.form.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
-     @*Google Map*@ 
+    @*Google Map*@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-     @*jquery easing*@ 
+    @*jquery easing*@
     <script src="js/jquery.easing.min.js"></script>
-     @*jquery easing*@ 
+    @*jquery easing*@
     <script src="js/wow.min.js"></script>
     <script>
         var wow = new WOW({

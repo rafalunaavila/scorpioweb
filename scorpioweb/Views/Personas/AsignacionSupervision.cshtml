@@ -16,6 +16,9 @@
                 Nombre
             </th>
             <th>
+                Fecha de ingreso
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Supervisor)
             </th>
         </tr>
@@ -23,26 +26,29 @@
     <tbody>
         @foreach (var item in Model.Where(u => u.Supervisor == null))
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    <form asp-action="EditSupervisor">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>                        
-                        <div class="form-group">
-                            <input type="hidden" asp-for="@item.IdPersona" name="IdPersona" id="IdPersona"/>
-                            <select class="form-control" name="Supervisor" id="Supervisor"
-                                    asp-items="@(new SelectList(ViewBag.ListadoUsuarios, "Text","Text"))">
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Guardar Cambios" class="btn btn-success" />
-                            <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.IdPersona">Detalles</a>
-                        </div>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UltimaActualización)
+            </td>
+            <td>
+                <form asp-action="EditSupervisor">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input type="hidden" asp-for="@item.IdPersona" name="IdPersona" id="IdPersona" />
+                        <select class="form-control" name="Supervisor" id="Supervisor"
+                                asp-items="@(new SelectList(ViewBag.ListadoUsuarios, "Text","Text"))">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Guardar Cambios" class="btn btn-success" />
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.IdPersona">Detalles</a>
+                    </div>
+                </form>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

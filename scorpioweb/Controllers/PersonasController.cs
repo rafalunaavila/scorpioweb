@@ -125,15 +125,24 @@ namespace scorpioweb.Controllers
                     throw;
                 }
             }
-
-            return View("MenuMCSCP");
+            return RedirectToAction("MenuMCSCP");
         }
 
         #endregion
 
-        public IActionResult MenuMCSCP()
-        {
+        public async Task<IActionResult> MenuMCSCP()
+        {            
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var roles = await userManager.GetRolesAsync(user);
 
+            List<string> rolUsuario = new List<string>();
+
+            for (int i = 0; i < roles.Count; i++)
+            {
+                rolUsuario.Add(roles[i]);
+            }
+
+            ViewBag.RolesUsuario = rolUsuario;
             return View();
         }
 
@@ -320,7 +329,7 @@ namespace scorpioweb.Controllers
         }
 
         // GET: Personas/Create
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "AdminMCSCP, SupervisorMCSCP, Masteradmin")]
         public IActionResult Create(Estados Estados)
         {
             //datosSustancias.Clear();            

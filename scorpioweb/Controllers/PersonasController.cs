@@ -24,6 +24,7 @@ namespace scorpioweb.Controllers
     [Authorize]
     public class PersonasController : Controller
     {
+
         //To get content root path of the project
         private readonly IHostingEnvironment _hostingEnvironment;
 
@@ -66,14 +67,112 @@ namespace scorpioweb.Controllers
         }
 
         // GET: Personas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
-            return View(await _context.Persona.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var personas = from p in _context.Persona
+                           where p.Supervisor != null
+                           select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                personas = personas.Where(p => p.Paterno.Contains(searchString)
+                                        || p.Materno.Contains(searchString)
+                                        || p.Nombre.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    personas = personas.OrderByDescending(p => p.Paterno);
+                    break;
+                case "Date":
+                    personas = personas.OrderBy(p => p.UltimaActualización);
+                    break;
+                case "date_desc":
+                    personas = personas.OrderByDescending(p => p.UltimaActualización);
+                    break;
+                default:
+                    personas = personas.OrderBy(p => p.Paterno);
+                    break;
+            }
+
+            int pageSize = 10;
+            return View(await PaginatedList<Persona>.CreateAsync(personas.AsNoTracking(), pageNumber?? 1, pageSize));
         }
 
-        public async Task<IActionResult> ListadoSupervisor()
+        public async Task<IActionResult> ListadoSupervisor(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
-            return View(await _context.Persona.ToListAsync());
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var personas = from p in _context.Persona
+                           where p.Supervisor == User.Identity.Name
+                           select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                personas = personas.Where(p => p.Paterno.Contains(searchString)
+                                        || p.Materno.Contains(searchString)
+                                        || p.Nombre.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    personas = personas.OrderByDescending(p => p.Paterno);
+                    break;
+                case "Date":
+                    personas = personas.OrderBy(p => p.UltimaActualización);
+                    break;
+                case "date_desc":
+                    personas = personas.OrderByDescending(p => p.UltimaActualización);
+                    break;
+                default:
+                    personas = personas.OrderBy(p => p.Paterno);
+                    break;
+            }
+
+            int pageSize = 10;
+            return View(await PaginatedList<Persona>.CreateAsync(personas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         #region -AsignaSupervision-

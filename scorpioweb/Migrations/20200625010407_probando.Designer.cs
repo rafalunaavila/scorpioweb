@@ -11,8 +11,8 @@ using System;
 namespace scorpioweb.Migrations
 {
     [DbContext(typeof(penas2Context))]
-    [Migration("20200520160108_usuarios-migration")]
-    partial class usuariosmigration
+    [Migration("20200625010407_probando")]
+    partial class probando
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -571,6 +571,9 @@ namespace scorpioweb.Migrations
 
                     b.Property<string>("Propiedades")
                         .HasMaxLength(45);
+
+                    b.Property<string>("Supervisor")
+                        .HasMaxLength(100);
 
                     b.Property<string>("TelefonoFijo")
                         .HasMaxLength(45);

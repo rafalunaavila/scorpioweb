@@ -571,6 +571,9 @@ namespace scorpioweb.Migrations
                     b.Property<string>("Propiedades")
                         .HasMaxLength(45);
 
+                    b.Property<string>("Supervisor")
+                        .HasMaxLength(100);
+
                     b.Property<string>("TelefonoFijo")
                         .HasMaxLength(45);
 

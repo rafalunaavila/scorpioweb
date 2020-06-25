@@ -22,21 +22,45 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Where(u => u.Supervisor ==User.Identity.Name)) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Supervisor)
-            </td>
+        @if (User.Identity.Name == "yoena@dgepms.com")
+        {
+            @foreach (var item in Model.Where(u => u.Supervisor != null))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supervisor)
+                    </td>
 
-            <td>
-                <a asp-action="MenuEdicion" asp-route-id="@item.IdPersona">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.IdPersona">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdPersona">Delete</a>
-            </td>
-        </tr>
-}
+                    <td>
+                        <a asp-action="MenuEdicion" asp-route-id="@item.IdPersona">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.IdPersona">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.IdPersona">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @foreach (var item in Model.Where(u => u.Supervisor == User.Identity.Name))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Paterno) @Html.DisplayFor(modelItem => item.Materno) @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supervisor)
+                    </td>
+
+                    <td>
+                        <a asp-action="MenuEdicion" asp-route-id="@item.IdPersona">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.IdPersona">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.IdPersona">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>

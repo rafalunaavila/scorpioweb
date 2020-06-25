@@ -38,6 +38,7 @@ namespace scorpioweb.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         #endregion
 
+        #region -Constructor-
         public PersonasController(penas2Context context, IHostingEnvironment hostingEnvironment,
                                   RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
@@ -46,6 +47,7 @@ namespace scorpioweb.Controllers
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
+        #endregion
 
         public IActionResult ExportToPDF()
         {
@@ -124,7 +126,7 @@ namespace scorpioweb.Controllers
                 }
             }
 
-            return View(persona);
+            return View("MenuMCSCP");
         }
 
         #endregion

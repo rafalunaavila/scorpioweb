@@ -18,7 +18,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Supervisor)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -39,17 +38,9 @@
                         </div>
                         <div class="form-group">
                             <input type="submit" value="Guardar Cambios" class="btn btn-success" />
+                            <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.IdPersona">Detalles</a>
                         </div>
                     </form>
-                    <select class="form-control" name="supervisor" id="supervisor"
-                            asp-items="@(new SelectList(ViewBag.ListadoUsuarios, "Text","Text"))">
-                    </select>
-                </td>
-
-                <td>
-                    <a asp-action="EditSupervisor" asp-route-id="@item.IdPersona">Asignar</a> |
-                    <a asp-action="Details" asp-route-id="@item.IdPersona">Details</a> |
-                    @*<a asp-action="Delete" asp-route-id="@item.IdPersona">Delete</a>*@
                 </td>
             </tr>
         }

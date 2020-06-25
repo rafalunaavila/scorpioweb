@@ -5,6 +5,11 @@
     <UserSecretsId>aspnet-scorpioweb-602369CA-DE7C-41E5-9AF9-DCDFAB66B4AA</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20200625003843_update.cs" />
+    <Compile Remove="Migrations\20200625003843_update.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="jQuery" Version="3.4.1" />

@@ -466,10 +466,17 @@ namespace scorpioweb.Controllers
         {
             string estado = "";
 
-            if (!String.IsNullOrEmpty(id))
+            if (id == "0")
             {
-                List<Estados> estados = _context.Estados.ToList();
-                estado = (estados.FirstOrDefault(x => x.Id == Int32.Parse(id)).Estado).ToUpper();
+                estado = "SIN ESTADO";
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(id))
+                {
+                    List<Estados> estados = _context.Estados.ToList();
+                    estado = (estados.FirstOrDefault(x => x.Id == Int32.Parse(id)).Estado).ToUpper();
+                }
             }
             return estado;
         }
@@ -477,11 +484,19 @@ namespace scorpioweb.Controllers
         public string generaMunicipio(string id)
         {
             string municipio = "";
-            if (!String.IsNullOrEmpty(id))
+
+            if (id == "0")
             {
-                List<Municipios> municipios = _context.Municipios.ToList();
-                municipio = (municipios.FirstOrDefault(x => x.Id == Int32.Parse(id)).Municipio).ToUpper();
+                municipio = "SIN MUNICIPIO";
             }
+            else
+            {
+                if (!String.IsNullOrEmpty(id))
+                {
+                    List<Municipios> municipios = _context.Municipios.ToList();
+                    municipio = (municipios.FirstOrDefault(x => x.Id == Int32.Parse(id)).Municipio).ToUpper();
+                }
+            }            
             return municipio;
         }
 
@@ -843,6 +858,19 @@ namespace scorpioweb.Controllers
             }
 
             var persona = await _context.Persona.SingleOrDefaultAsync(m => m.IdPersona == id);
+
+            List<Estados> listaEstados = new List<Estados>();
+            listaEstados = (from table in _context.Estados
+                            select table).ToList();
+
+            listaEstados.Insert(0, new Estados { Id = 0, Estado = "Selecciona" });
+            ViewBag.ListadoEstados = listaEstados;
+
+            //ViewBag.Countries = new SelectList(countries.GetCountries(), "id", "countryName", "82");
+
+            //ViewBag.DDEstados = new SelectList(listaEstados, "Id", "Estados", persona.Lnestado);
+            ViewBag.idEstado = persona.Lnestado;
+
             if (persona == null)
             {
                 return NotFound();
